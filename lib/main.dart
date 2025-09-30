@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kirat_script/homepage.dart';
+import 'package:kirat_script/screens/keyboard_screen.dart';
+import 'package:provider/provider.dart';
+import 'providers/keyboard_provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,6 +12,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Kirat Lipi Keyboard', home: MainPage());
+    return ChangeNotifierProvider(
+      create: (context) => KeyboardProvider(),
+      child: MaterialApp(
+        title: 'Kirat Keyboard',
+        theme: ThemeData(primarySwatch: Colors.green),
+        home: const KeyboardScreen(),
+      ),
+    );
   }
 }
