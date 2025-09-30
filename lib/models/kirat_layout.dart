@@ -28,7 +28,7 @@ class KiratKeyboardLayout {
       KiratKey(primaryChar: '᥏'), // 9
       KiratKey(primaryChar: '᥆'), // 0
     ],
-    // Row 2 - Main Consonants (Capital letters)
+    // Row 2 (Consonats)
     [
       KiratKey(primaryChar: 'ᤀ', shiftChar: null),
       KiratKey(primaryChar: 'ᤁ', shiftChar: 'ᤰ'), // ᤁ => ᤰ
