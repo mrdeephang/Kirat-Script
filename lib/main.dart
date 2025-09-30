@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         return MaterialApp(
-          title: 'Limbu Keyboard',
+          title: 'Kirat Keyboard',
           theme: themeProvider.currentTheme,
           home: const KeyboardScreen(),
           debugShowCheckedModeBanner: false,

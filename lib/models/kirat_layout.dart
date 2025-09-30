@@ -34,12 +34,11 @@ class KiratKeyboardLayout {
       KiratKey(primaryChar: 'ᤁ', shiftChar: 'ᤰ'), // ᤁ => ᤰ
       KiratKey(primaryChar: 'ᤂ', shiftChar: null),
       KiratKey(primaryChar: 'ᤃ', shiftChar: null),
-      KiratKey(primaryChar: 'ᤄ', shiftChar: null),
       KiratKey(primaryChar: 'ᤅ', shiftChar: 'ᤱ'), // ᤅ => ᤱ
       KiratKey(primaryChar: 'ᤆ', shiftChar: null),
       KiratKey(primaryChar: 'ᤇ', shiftChar: null),
       KiratKey(primaryChar: 'ᤈ', shiftChar: null),
-      KiratKey(primaryChar: 'ᤉ', shiftChar: null),
+      KiratKey(primaryChar: 'ᤏ', shiftChar: 'ᤴ'), // ᤏ => ᤴ
     ],
     // Row 3 - More Consonants
     [
@@ -47,7 +46,6 @@ class KiratKeyboardLayout {
       KiratKey(primaryChar: 'ᤌ', shiftChar: null),
       KiratKey(primaryChar: 'ᤍ', shiftChar: null),
       KiratKey(primaryChar: 'ᤎ', shiftChar: null),
-      KiratKey(primaryChar: 'ᤏ', shiftChar: 'ᤴ'), // ᤏ => ᤴ
       KiratKey(primaryChar: 'ᤐ', shiftChar: 'ᤵ'), // ᤐ => ᤵ
       KiratKey(primaryChar: 'ᤑ', shiftChar: null),
       KiratKey(primaryChar: 'ᤓ', shiftChar: null),
@@ -62,6 +60,7 @@ class KiratKeyboardLayout {
       KiratKey(primaryChar: 'ᤙ', shiftChar: null),
       KiratKey(primaryChar: 'ᤛ', shiftChar: null),
       KiratKey(primaryChar: 'ᤜ', shiftChar: null),
+      KiratKey(primaryChar: 'ᤄ', shiftChar: null),
       KiratKey(primaryChar: 'ᤪ', shiftChar: null), // Special diacritic ^
       KiratKey(primaryChar: 'ᤠ', shiftChar: null), // Vowel
       KiratKey(primaryChar: 'ᤡ', shiftChar: null), // Vowel
