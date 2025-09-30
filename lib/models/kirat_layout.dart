@@ -13,6 +13,7 @@ class KiratKey {
 }
 
 class KiratKeyboardLayout {
+  // Kirat Layout with numbers row
   static const List<List<KiratKey>> kiratLayout = [
     // Row 1 - Numbers
     [
@@ -27,7 +28,7 @@ class KiratKeyboardLayout {
       KiratKey(primaryChar: '᥏'), // 9
       KiratKey(primaryChar: '᥆'), // 0
     ],
-    // Row 2 - kirat consonants
+    // Row 2 - Kirat consonants
     [
       KiratKey(primaryChar: 'ᤁ'),
       KiratKey(primaryChar: 'ᤃ'),
@@ -40,7 +41,7 @@ class KiratKeyboardLayout {
       KiratKey(primaryChar: 'ᤑ'),
       KiratKey(primaryChar: 'ᤓ'),
     ],
-    // Row 3 - More kirat characters
+    // Row 3 - More Kirat characters
     [
       KiratKey(primaryChar: 'ᤕ'),
       KiratKey(primaryChar: 'ᤗ'),
@@ -53,7 +54,7 @@ class KiratKeyboardLayout {
       KiratKey(primaryChar: 'ᤥ'),
       KiratKey(primaryChar: 'ᤧ'),
     ],
-    // Row 4 - Additional kirat characters
+    // Row 4 - Additional Kirat characters
     [
       KiratKey(primaryChar: 'ᤩ'),
       KiratKey(primaryChar: 'ᤫ'),
@@ -81,17 +82,16 @@ class KiratKeyboardLayout {
     [
       KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.5),
       KiratKey(primaryChar: ',', width: 1.0),
-      KiratKey(primaryChar: '।', width: 1.0), // kirat danda
-      KiratKey(primaryChar: '॥', width: 1.0), // kirat double danda
+      KiratKey(primaryChar: '॥', width: 1.0), // Kirat double danda
       KiratKey(primaryChar: ' ', width: 3.0), // Longer space
       KiratKey(primaryChar: '.', width: 1.0),
       KiratKey(primaryChar: '⏎', isSpecial: true, width: 1.5),
     ],
   ];
 
-  // kirat Symbols Layout
-  static const List<List<KiratKey>> kiratSymbolsLayout = [
-    // Row 1 - Numbers (always visible)
+  // Kirat Symbols Layout
+  static const List<List<KiratKey>> KiratSymbolsLayout = [
+    // Row 1 - Numbers
     [
       KiratKey(primaryChar: '᥇'), // 1
       KiratKey(primaryChar: '᥈'), // 2
@@ -158,7 +158,6 @@ class KiratKeyboardLayout {
     [
       KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.5),
       KiratKey(primaryChar: ',', width: 1.0),
-      KiratKey(primaryChar: '।', width: 1.0),
       KiratKey(primaryChar: '॥', width: 1.0),
       KiratKey(primaryChar: ' ', width: 3.0), // Longer space
       KiratKey(primaryChar: '.', width: 1.0),
@@ -168,7 +167,7 @@ class KiratKeyboardLayout {
 
   // English Layout with numbers row
   static const List<List<KiratKey>> englishLayout = [
-    // Row 1 - Numbers (always visible)
+    // Row 1 - Numbers
     [
       KiratKey(primaryChar: '1'),
       KiratKey(primaryChar: '2'),
@@ -245,7 +244,7 @@ class KiratKeyboardLayout {
 
   // English Symbols Layout
   static const List<List<KiratKey>> englishSymbolsLayout = [
-    // Row 1 - Numbers (always visible)
+    // Row 1 - Numbers
     [
       KiratKey(primaryChar: '1'),
       KiratKey(primaryChar: '2'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
+import 'package:kirat_script/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class SpaceBarWithLanguage extends StatelessWidget {
@@ -15,12 +16,14 @@ class SpaceBarWithLanguage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Consumer<KeyboardProvider>(
       builder: (context, provider, child) {
         return Container(
           margin: const EdgeInsets.all(2),
           child: Material(
-            color: Colors.white,
+            color: themeProvider.isDarkMode ? Colors.grey[600]! : Colors.white,
             borderRadius: BorderRadius.circular(6),
             child: InkWell(
               onTap: () => onTap(keyData.primaryChar),
@@ -33,18 +36,19 @@ class SpaceBarWithLanguage extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors
-                            .transparent, // Make space character invisible
+                        color: Colors.transparent,
                       ),
                     ),
                   ),
                   Center(
                     child: Text(
                       provider.getLanguageDisplayName(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey,
+                        color: themeProvider.isDarkMode
+                            ? Colors.grey[300]
+                            : Colors.grey[600],
                       ),
                     ),
                   ),

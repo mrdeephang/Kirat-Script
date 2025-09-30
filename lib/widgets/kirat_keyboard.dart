@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kirat_script/providers/keyboard_provider.dart';
 import 'package:kirat_script/widgets/keyboard_key.dart';
 import 'package:kirat_script/widgets/spacebar.dart';
 import 'package:provider/provider.dart';
+import '../providers/keyboard_provider.dart';
+import '../providers/theme_provider.dart';
 
 class KiratKeyboard extends StatelessWidget {
   final Function(String) onKeyPressed;
@@ -11,11 +12,13 @@ class KiratKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Consumer<KeyboardProvider>(
       builder: (context, provider, child) {
         return Container(
           height: 300,
-          color: Colors.grey[300],
+          color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[300],
           child: Column(
             children: [
               for (int i = 0; i < provider.currentKeys.length; i++)

@@ -4,7 +4,7 @@ import 'package:kirat_script/models/kirat_layout.dart';
 class KeyboardProvider with ChangeNotifier {
   bool _isShiftEnabled = false;
   bool _isSymbolsMode = false;
-  String _currentLanguage = 'kirat'; // 'kirat' or 'english'
+  String _currentLanguage = 'Kirat'; // 'Kirat' or 'english'
 
   bool get isShiftEnabled => _isShiftEnabled;
   bool get isSymbolsMode => _isSymbolsMode;
@@ -17,7 +17,7 @@ class KeyboardProvider with ChangeNotifier {
           : KiratKeyboardLayout.englishLayout;
     } else {
       return _isSymbolsMode
-          ? KiratKeyboardLayout.kiratSymbolsLayout
+          ? KiratKeyboardLayout.KiratSymbolsLayout
           : KiratKeyboardLayout.kiratLayout;
     }
   }
@@ -44,7 +44,7 @@ class KeyboardProvider with ChangeNotifier {
   }
 
   void toggleLanguage() {
-    _currentLanguage = _currentLanguage == 'kirat' ? 'english' : 'kirat';
+    _currentLanguage = _currentLanguage == 'Kirat' ? 'english' : 'Kirat';
     _isShiftEnabled = false;
     _isSymbolsMode = false;
     notifyListeners();
@@ -61,6 +61,6 @@ class KeyboardProvider with ChangeNotifier {
   }
 
   String getLanguageDisplayName() {
-    return _currentLanguage == 'kirat' ? 'kirat' : 'English';
+    return _currentLanguage == 'Kirat' ? 'Kirat' : 'English';
   }
 }

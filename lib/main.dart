@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:kirat_script/screens/keyboard_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/keyboard_provider.dart';
+import 'providers/theme_provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => KeyboardProvider(),
-      child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => KeyboardProvider()),
+      ],
+      child: MyApp(),
     ),
   );
 }
@@ -17,10 +21,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Kirat Keyboard',
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: const KeyboardScreen(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          title: 'Limbu Keyboard',
+          theme: themeProvider.currentTheme,
+          home: const KeyboardScreen(),
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }
