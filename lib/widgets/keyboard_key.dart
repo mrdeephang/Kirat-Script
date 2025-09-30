@@ -35,8 +35,6 @@ class KeyboardKey extends StatelessWidget {
           if (keyData.primaryChar == '⇧' && provider.isShiftEnabled) {
             keyColor = Colors.blue[700]!;
           }
-
-          // Highlight backspace when pressed
           if (keyData.primaryChar == '⌫' && provider.isBackspacePressed) {
             keyColor = Colors.red[700]!;
           }

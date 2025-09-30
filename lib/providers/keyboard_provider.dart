@@ -100,7 +100,6 @@ class KeyboardProvider with ChangeNotifier {
         key.shiftChar != null) {
       return key.shiftChar!;
     }
-
     return key.primaryChar;
   }
 

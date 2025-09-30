@@ -19,13 +19,7 @@ class SpaceBarWithLanguage extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Consumer<KeyboardProvider>(
-      builder: (context, provider, child) {
-        // Debug: Print current language to verify
-        // if (kDebugMode) {
-        //   print('Current Language: ${provider.currentLanguage}');
-        //   print('Display Name: ${provider.getLanguageDisplayName()}');
-        // }
-
+      builder: (context, keyboardProvider, child) {
         return Container(
           margin: const EdgeInsets.all(2),
           child: Material(
@@ -48,7 +42,7 @@ class SpaceBarWithLanguage extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      provider.getLanguageDisplayName(),
+                      keyboardProvider.getLanguageDisplayName(),
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

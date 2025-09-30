@@ -28,20 +28,26 @@ class KiratKeyboard extends StatelessWidget {
           });
         }
 
+        final currentKeys = keyboardProvider.currentKeys;
+        final lastRowIndex = currentKeys.length - 1;
+
         return Container(
           height: 300,
           color: themeProvider.isDarkMode ? darkColor : Colors.grey[300],
           child: Column(
             children: [
-              for (int i = 0; i < keyboardProvider.currentKeys.length; i++)
+              for (int i = 0; i < currentKeys.length; i++)
                 Expanded(
                   child: Row(
                     children: [
-                      for (final key in keyboardProvider.currentKeys[i])
+                      for (final key in currentKeys[i])
                         Expanded(
                           flex: (key.width * 10).toInt(),
-                          child: i == 5 && key.primaryChar == ' '
+                          child: i == lastRowIndex && key.primaryChar == ' '
                               ? SpaceBarWithLanguage(
+                                  key: Key(
+                                    'spacebar_${keyboardProvider.currentLanguage}_${keyboardProvider.isSymbolsMode}',
+                                  ),
                                   keyData: key,
                                   onTap: onKeyPressed,
                                 )
