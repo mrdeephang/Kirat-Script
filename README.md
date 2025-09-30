@@ -63,3 +63,11 @@ Built with Flutter using:
 ## Support
 
 Supports Android and iOS devices with Flutter compatibility.
+
+## Future Enhancement
+
+- make it usable as default keyboard through settings
+
+## Author
+
+Copyright © 2025 Deephang Thegim. All rights reserved.
