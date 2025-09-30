@@ -2,8 +2,9 @@
 
 A custom in-app keyboard implementation for Android and iOS supporting both Kirat script and English QWERTY layouts.
 
-![Image](https://github.com/user-attachments/assets/bd59f19f-a87a-484b-b937-8e9166a27526)
-![Image](https://github.com/user-attachments/assets/d96de7eb-26e0-4762-a417-627c81a3548c)
+<img src="https://github.com/user-attachments/assets/bd59f19f-a87a-484b-b937-8e9166a27526" alt="Screenshot 1" width="400"/>
+<img src="https://github.com/user-attachments/assets/d96de7eb-26e0-4762-a417-627c81a3548c" alt="Screenshot 2" width="400"/>
+
 
 ## Features
 
