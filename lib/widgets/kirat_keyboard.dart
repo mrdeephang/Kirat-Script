@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kirat_script/easyconst/colors.dart';
 import 'package:kirat_script/widgets/keyboard_key.dart';
 import 'package:kirat_script/widgets/spacebar.dart';
 import 'package:provider/provider.dart';
@@ -7,25 +8,36 @@ import '../providers/theme_provider.dart';
 
 class KiratKeyboard extends StatelessWidget {
   final Function(String) onKeyPressed;
+  final Function() onBackspaceLongPress;
 
-  const KiratKeyboard({super.key, required this.onKeyPressed});
+  const KiratKeyboard({
+    super.key,
+    required this.onKeyPressed,
+    required this.onBackspaceLongPress,
+  });
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Consumer<KeyboardProvider>(
-      builder: (context, provider, child) {
+      builder: (context, keyboardProvider, child) {
+        if (keyboardProvider.isBackspacePressed) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            onKeyPressed('⌫');
+          });
+        }
+
         return Container(
           height: 300,
-          color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[300],
+          color: themeProvider.isDarkMode ? darkColor : Colors.grey[300],
           child: Column(
             children: [
-              for (int i = 0; i < provider.currentKeys.length; i++)
+              for (int i = 0; i < keyboardProvider.currentKeys.length; i++)
                 Expanded(
                   child: Row(
                     children: [
-                      for (final key in provider.currentKeys[i])
+                      for (final key in keyboardProvider.currentKeys[i])
                         Expanded(
                           flex: (key.width * 10).toInt(),
                           child: i == 5 && key.primaryChar == ' '
@@ -42,8 +54,11 @@ class KiratKeyboard extends StatelessWidget {
                                         key.primaryChar == '⏎') {
                                       onKeyPressed(text);
                                     }
-                                    provider.handleKeyPress(key);
+                                    keyboardProvider.handleKeyPress(key);
                                   },
+                                  onLongPress: key.primaryChar == '⌫'
+                                      ? onBackspaceLongPress
+                                      : null,
                                 ),
                         ),
                     ],

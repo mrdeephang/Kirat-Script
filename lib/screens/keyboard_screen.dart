@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
 import 'package:kirat_script/providers/theme_provider.dart';
@@ -14,6 +15,7 @@ class KeyboardScreen extends StatefulWidget {
 class _KeyboardScreenState extends State<KeyboardScreen> {
   final TextEditingController _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  Timer? _fastDeleteTimer;
 
   void _insertText(String text) {
     final currentText = _textController.text;
@@ -49,8 +51,27 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
     );
   }
 
+  void _startFastDelete() {
+    // Initial delete
+    _deleteText();
+
+    // Start continuous deletion
+    _fastDeleteTimer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (_textController.text.isNotEmpty) {
+        _deleteText();
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
   void _handleKeyPress(String text) {
-    if (text == '⇧' || text == '🌐' || text == '!#1' || text == 'ABC') {
+    if (text == '⇧' ||
+        text == '🌐' ||
+        text == '!#1' ||
+        text == 'ABC' ||
+        text == '!#᥇' ||
+        text == 'ᤁᤂᤃ') {
       return;
     }
 
@@ -127,7 +148,10 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
             ),
           ),
           // The keyboard
-          KiratKeyboard(onKeyPressed: _handleKeyPress),
+          KiratKeyboard(
+            onKeyPressed: _handleKeyPress,
+            onBackspaceLongPress: _startFastDelete,
+          ),
         ],
       ),
     );
@@ -137,6 +161,7 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
   void dispose() {
     _textController.dispose();
     _focusNode.dispose();
+    _fastDeleteTimer?.cancel();
     super.dispose();
   }
 }

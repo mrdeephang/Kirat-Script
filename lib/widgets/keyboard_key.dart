@@ -7,8 +7,14 @@ import 'package:provider/provider.dart';
 class KeyboardKey extends StatelessWidget {
   final KiratKey keyData;
   final Function(String) onTap;
+  final Function()? onLongPress;
 
-  const KeyboardKey({super.key, required this.keyData, required this.onTap});
+  const KeyboardKey({
+    super.key,
+    required this.keyData,
+    required this.onTap,
+    this.onLongPress,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +24,21 @@ class KeyboardKey extends StatelessWidget {
       builder: (context, provider, child) {
         final displayText = provider.getKeyText(keyData);
 
-        Color keyColor = themeProvider.isDarkMode
-            ? Colors.grey[700]!
+        Color? keyColor = themeProvider.isDarkMode
+            ? Colors.grey[900]
             : Colors.white;
         Color textColor = themeProvider.isDarkMode
             ? Colors.white
             : Colors.black;
 
         if (keyData.isSpecial) {
-          textColor = Colors.white;
-
           if (keyData.primaryChar == '⇧' && provider.isShiftEnabled) {
             keyColor = Colors.blue[700]!;
+          }
+
+          // Highlight backspace when pressed
+          if (keyData.primaryChar == '⌫' && provider.isBackspacePressed) {
+            keyColor = Colors.red[700]!;
           }
         }
 
@@ -40,6 +49,16 @@ class KeyboardKey extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             child: InkWell(
               onTap: () => onTap(displayText),
+              onLongPress: keyData.primaryChar == '⌫' ? onLongPress : null,
+              onTapDown: keyData.primaryChar == '⌫'
+                  ? (_) => provider.startBackspace()
+                  : null,
+              onTapUp: keyData.primaryChar == '⌫'
+                  ? (_) => provider.stopBackspace()
+                  : null,
+              onTapCancel: keyData.primaryChar == '⌫'
+                  ? () => provider.stopBackspace()
+                  : null,
               borderRadius: BorderRadius.circular(6),
               child: Center(
                 child: Text(
