@@ -4,7 +4,12 @@ import 'package:provider/provider.dart';
 import 'providers/keyboard_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => KeyboardProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,13 +17,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => KeyboardProvider(),
-      child: MaterialApp(
-        title: 'Kirat Keyboard',
-        theme: ThemeData(primarySwatch: Colors.green),
-        home: const KeyboardScreen(),
-      ),
+    return MaterialApp(
+      title: 'Kirat Keyboard',
+      theme: ThemeData(primarySwatch: Colors.green),
+      home: const KeyboardScreen(),
     );
   }
 }
