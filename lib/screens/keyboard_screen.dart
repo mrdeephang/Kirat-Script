@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
 import 'package:kirat_script/providers/theme_provider.dart';
@@ -16,6 +17,13 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
   final TextEditingController _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   Timer? _fastDeleteTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Disable system keyboard by preventing focus
+    _focusNode.unfocus();
+  }
 
   void _insertText(String text) {
     final currentText = _textController.text;
@@ -52,7 +60,6 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
   }
 
   void _startFastDelete() {
-    // Initial delete
     _deleteText();
 
     // Start continuous deletion
@@ -110,49 +117,58 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                minLines: 1,
-                maxLines: 3,
-                textAlign: TextAlign.left,
-                textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: themeProvider.isDarkMode ? Colors.white : Colors.black,
-                  letterSpacing: 1.2,
-                ),
-                controller: _textController,
-                focusNode: _focusNode,
-                decoration: InputDecoration(
-                  hintText: 'Type here...',
-                  hintStyle: TextStyle(
-                    fontSize: 14,
+      body: GestureDetector(
+        onTap: () {
+          // system keyboard won't open on typing
+          _focusNode.unfocus();
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  minLines: 1,
+                  maxLines: null,
+                  textAlign: TextAlign.left,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                     color: themeProvider.isDarkMode
-                        ? Colors.grey[400]
-                        : Colors.grey[600],
+                        ? Colors.white
+                        : Colors.black,
+                    letterSpacing: 1.2,
                   ),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  controller: _textController,
+                  focusNode: _focusNode,
+                  readOnly: true, // Prevent system keyboard from opening
+                  showCursor: true,
+                  decoration: InputDecoration(
+                    hintText: 'Tap here....',
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: themeProvider.isDarkMode
+                          ? Colors.grey[400]
+                          : Colors.grey[600],
+                    ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    filled: true,
+                    fillColor: themeProvider.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.white,
                   ),
-                  filled: true,
-                  fillColor: themeProvider.isDarkMode
-                      ? Colors.grey[800]
-                      : Colors.white,
                 ),
               ),
             ),
-          ),
-          // The keyboard
-          KiratKeyboard(
-            onKeyPressed: _handleKeyPress,
-            onBackspaceLongPress: _startFastDelete,
-          ),
-        ],
+            KiratKeyboard(
+              onKeyPressed: _handleKeyPress,
+              onBackspaceLongPress: _startFastDelete,
+            ),
+          ],
+        ),
       ),
     );
   }

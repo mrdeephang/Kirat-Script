@@ -23,7 +23,7 @@ class SpaceBarWithLanguage extends StatelessWidget {
         return Container(
           margin: const EdgeInsets.all(2),
           child: Material(
-            color: themeProvider.isDarkMode ? Colors.grey[600]! : Colors.white,
+            color: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.white,
             borderRadius: BorderRadius.circular(6),
             child: InkWell(
               onTap: () => onTap(keyData.primaryChar),
