@@ -52,7 +52,7 @@ class KeyboardProvider with ChangeNotifier {
     notifyListeners();
 
     // Start continuous deletion after initial press
-    _backspaceTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    _backspaceTimer = Timer.periodic(Duration(milliseconds: 150), (timer) {
       if (_isBackspacePressed) {
         // Notify to delete one character
         notifyListeners();

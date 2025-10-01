@@ -142,10 +142,10 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
                   ),
                   controller: _textController,
                   focusNode: _focusNode,
-                  readOnly: true, // Prevent system keyboard from opening
+                  readOnly: true,
                   showCursor: true,
                   decoration: InputDecoration(
-                    hintText: 'Tap here....',
+                    hintText: 'Tap below to type with Kirat keyboard...',
                     hintStyle: TextStyle(
                       fontSize: 14,
                       color: themeProvider.isDarkMode

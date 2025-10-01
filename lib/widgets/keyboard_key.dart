@@ -24,18 +24,22 @@ class KeyboardKey extends StatelessWidget {
       builder: (context, provider, child) {
         final displayText = provider.getKeyText(keyData);
 
-        Color? keyColor = themeProvider.isDarkMode
-            ? Colors.grey[900]
-            : Colors.white;
-        Color textColor = themeProvider.isDarkMode
-            ? Colors.white
-            : Colors.black;
+        // Pre-calculate colors to avoid repeated calculations
+        final bool isDarkMode = themeProvider.isDarkMode;
+        final bool isShiftEnabled = provider.isShiftEnabled;
+        final bool isBackspacePressed = provider.isBackspacePressed;
+
+        Color keyColor = isDarkMode ? Colors.grey[700]! : Colors.white;
+        Color textColor = isDarkMode ? Colors.white : Colors.black;
 
         if (keyData.isSpecial) {
-          if (keyData.primaryChar == '⇧' && provider.isShiftEnabled) {
+          textColor = Colors.white;
+
+          if (keyData.primaryChar == '⇧' && isShiftEnabled) {
             keyColor = Colors.blue[700]!;
           }
-          if (keyData.primaryChar == '⌫' && provider.isBackspacePressed) {
+
+          if (keyData.primaryChar == '⌫' && isBackspacePressed) {
             keyColor = Colors.red[700]!;
           }
         }
@@ -48,15 +52,6 @@ class KeyboardKey extends StatelessWidget {
             child: InkWell(
               onTap: () => onTap(displayText),
               onLongPress: keyData.primaryChar == '⌫' ? onLongPress : null,
-              onTapDown: keyData.primaryChar == '⌫'
-                  ? (_) => provider.startBackspace()
-                  : null,
-              onTapUp: keyData.primaryChar == '⌫'
-                  ? (_) => provider.stopBackspace()
-                  : null,
-              onTapCancel: keyData.primaryChar == '⌫'
-                  ? () => provider.stopBackspace()
-                  : null,
               borderRadius: BorderRadius.circular(6),
               child: Center(
                 child: Text(
