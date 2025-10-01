@@ -109,7 +109,7 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
               color: Colors.white,
             ),
             onPressed: () => themeProvider.toggleTheme(),
