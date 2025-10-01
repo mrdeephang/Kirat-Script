@@ -4,8 +4,12 @@ A custom in-app keyboard implementation for Android and iOS supporting both Kira
 
 ## Screenshots
 
-<img src="https://github.com/user-attachments/assets/bd59f19f-a87a-484b-b937-8e9166a27526" alt="Screenshot 1" width="300"/>
-<img src="https://github.com/user-attachments/assets/d96de7eb-26e0-4762-a417-627c81a3548c" alt="Screenshot 2" width="300"/>
+<img src="https://github.com/user-attachments/assets/96d0ac2e-649d-4d26-a482-ff81106b4225" alt="Screenshot 1" width="300"/>
+<img src="https://github.com/user-attachments/assets/427d1ef0-4ceb-4b0b-a177-3f63f1e36eb7" alt="Screenshot 2" width="300"/>
+<img src="https://github.com/user-attachments/assets/416ac6ad-017c-4d15-ae7b-9041b2b164b5" alt="Screenshot 3" width="300"/>
+<img src="https://github.com/user-attachments/assets/3f6de3fd-6481-4459-a4eb-b4a2f4ac037a" alt="Screenshot 4" width="300"/>
+<img src="https://github.com/user-attachments/assets/f2d46e6f-4668-42c9-9c01-6bb304c2fd9c" alt="Screenshot 5" width="300"/>
+
 
 
 ## Features
