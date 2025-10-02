@@ -28,7 +28,7 @@ A custom in-app keyboard implementation for Android and iOS supporting both Kira
 
 ### Kirat Mode
 
-- Top row: Kirat numbers ᥇-᥆
+- Top row: Kirat numbers 0-᥏
 - Main area: Kirat consonants and vowels
 - Symbols: Kirat-specific punctuation and common symbols
 
@@ -70,7 +70,7 @@ Supports Android and iOS devices with Flutter compatibility.
 
 ## Future Enhancement
 
-- make it usable as default keyboard through settings
+- make it usable as default keyboard through settings in a phone
 
 ## Author
 
