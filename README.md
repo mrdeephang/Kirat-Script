@@ -1,10 +1,10 @@
-# ⌨️ Kirat Script
+# Kirat Script
 
 > **Custom in-app keyboard for Kirat script** — Seamless bilingual typing with English QWERTY support
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/96d0ac2e-649d-4d26-a482-ff81106b4225" alt="Kirat Keyboard" width="250"/>
@@ -21,45 +21,46 @@
 
 ## ✨ Features
 
-- 🌐 **Dual language support** — Toggle between Kirat script and English QWERTY
-- 🔢 **Persistent number row** — Always-visible numbers at the top
-- #️⃣ **Dedicated symbols mode** — Quick access to special characters
-- 🎯 **Smart layout system**:
+- **Dual language support** — Toggle between Kirat script and English QWERTY
+- **Persistent number row** — Always-visible numbers at the top
+- **Dedicated symbols mode** — Quick access to special characters
+- **Smart layout system**:
   - Kirat numbers (᥇-᥆) in Kirat mode
   - Standard numbers (0-9) in English mode
   - Comprehensive symbol sets for both languages
-- 💬 **Visual language indicator** — Current mode displayed above spacebar
-- 📱 **Cross-platform** — Optimized for both Android and iOS
+- Visual language indicator** — Current mode displayed above spacebar -**Cross-platform\*\* — Optimized for both Android and iOS
 
 ---
 
-## ⌨️ Keyboard Layouts
+## Keyboard Layouts
 
 ### Kirat Mode
+
 - **Top row**: Kirat numbers ᥇-᥏
 - **Main area**: Kirat consonants and vowels
 - **Symbols**: Kirat-specific punctuation and common symbols
 
 ### English Mode
+
 - **Top row**: Standard numbers 0-9
 - **Main area**: QWERTY layout
 - **Symbols**: Comprehensive symbol set
 
 ---
 
-## 🎮 Controls
+## Controls
 
-| Button | Function |
-|--------|----------|
-| **🌐 Globe** | Toggle between Kirat and English |
-| **!#1/ABC** | Switch between letters and symbols |
-| **⇧ Shift** | Capitalize letters / access additional symbols |
-| **⌫ Backspace** | Delete characters |
-| **⏎ Enter** | Insert new line |
+| Button          | Function                                       |
+| --------------- | ---------------------------------------------- |
+| **🌐 Globe**    | Toggle between Kirat and English               |
+| **!#1/ABC**     | Switch between letters and symbols             |
+| **⇧ Shift**     | Capitalize letters / access additional symbols |
+| **⌫ Backspace** | Delete characters                              |
+| **⏎ Enter**     | Insert new line                                |
 
 ---
 
-## 📁 Folder Structure
+## Folder Structure
 
 ```
 lib/
@@ -81,7 +82,7 @@ lib/
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 - **Flutter** — Cross-platform framework
 - **Provider** — State management
@@ -90,7 +91,7 @@ lib/
 
 ---
 
-## 💡 Usage
+## Usage
 
 1. Launch the app to access the in-app keyboard
 2. Tap the **🌐 globe icon** to switch languages
@@ -100,7 +101,7 @@ lib/
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ```bash
 # 1. Clone the repository
@@ -116,22 +117,22 @@ flutter run
 
 ---
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
-- ⚙️ **System keyboard integration** — Enable as default keyboard through device settings
-- 🎨 **Custom themes** — User-customizable keyboard appearance
-- 📝 **Text predictions** — Smart word suggestions
-- 🔊 **Haptic feedback** — Tactile key press response
+- **System keyboard integration** — Enable as default keyboard through device settings
+- **Custom themes** — User-customizable keyboard appearance
+- **Text predictions** — Smart word suggestions
+- **Haptic feedback** — Tactile key press response
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Deephang Thegim**  
 GitHub: [@mrdeephang](https://github.com/mrdeephang)
 
 ---
 
-## 📄 License
+## License
 
 Copyright © 2025 Deephang Thegim. All rights reserved.
