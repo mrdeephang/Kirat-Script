@@ -19,7 +19,7 @@
 
 ---
 
-## ✨ Features
+## Features
 
 - **Dual language support** — Toggle between Kirat script and English QWERTY
 - **Persistent number row** — Always-visible numbers at the top
@@ -52,7 +52,7 @@
 
 | Button          | Function                                       |
 | --------------- | ---------------------------------------------- |
-| **🌐 Globe**    | Toggle between Kirat and English               |
+| **Globe**    | Toggle between Kirat and English               |
 | **!#1/ABC**     | Switch between letters and symbols             |
 | **⇧ Shift**     | Capitalize letters / access additional symbols |
 | **⌫ Backspace** | Delete characters                              |
@@ -94,7 +94,7 @@ lib/
 ## Usage
 
 1. Launch the app to access the in-app keyboard
-2. Tap the **🌐 globe icon** to switch languages
+2. Tap the **globe icon** to switch languages
 3. Use **!#1/ABC** toggle for symbols and special characters
 4. Numbers are always accessible from the top row
 5. Current language is displayed above the spacebar
