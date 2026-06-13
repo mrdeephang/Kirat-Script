@@ -13,7 +13,6 @@ class KiratKey {
 }
 
 class KiratKeyboardLayout {
-  /* *********************************** Kirat ***********************************************/
   static const List<List<KiratKey>> kiratLayout = [
     // Row 1 - Numbers
     [

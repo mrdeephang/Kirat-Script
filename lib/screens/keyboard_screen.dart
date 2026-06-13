@@ -27,7 +27,11 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
 
   void _insertText(String text) {
     final currentText = _textController.text;
-    final selection = _textController.selection;
+    var selection = _textController.selection;
+
+    if (selection.start < 0 || selection.end < 0) {
+      selection = TextSelection.collapsed(offset: currentText.length);
+    }
 
     final newText = currentText.replaceRange(
       selection.start,
@@ -43,19 +47,25 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
 
   void _deleteText() {
     final currentText = _textController.text;
-    final selection = _textController.selection;
+    var selection = _textController.selection;
 
-    if (selection.start == 0) return;
+    if (selection.start < 0 || selection.end < 0) {
+      selection = TextSelection.collapsed(offset: currentText.length);
+    }
+
+    if (selection.start == 0 && selection.end == 0) return;
+
+    final startIndex = selection.start == selection.end ? selection.start - 1 : selection.start;
 
     final newText = currentText.replaceRange(
-      selection.start - 1,
-      selection.start,
+      startIndex,
+      selection.end,
       '',
     );
 
     _textController.value = TextEditingValue(
       text: newText,
-      selection: TextSelection.collapsed(offset: selection.start - 1),
+      selection: TextSelection.collapsed(offset: startIndex),
     );
   }
 

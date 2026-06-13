@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kirat_script/easyconst/colors.dart';
+import 'package:kirat_script/const/colors.dart';
 import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/widgets/keyboard_key.dart';
 import 'package:kirat_script/widgets/spacebar.dart';
