@@ -29,18 +29,21 @@ class KeyboardKey extends StatelessWidget {
         final bool isShiftEnabled = provider.isShiftEnabled;
         final bool isBackspacePressed = provider.isBackspacePressed;
 
-        Color keyColor = isDarkMode ? Colors.grey[700]! : Colors.white;
+        Color keyColor = isDarkMode ? Colors.grey[800]! : Colors.white;
         Color textColor = isDarkMode ? Colors.white : Colors.black;
 
         if (keyData.isSpecial) {
-          textColor = Colors.white;
+          keyColor = isDarkMode ? Colors.grey[700]! : Colors.grey[400]!;
+          textColor = isDarkMode ? Colors.white : Colors.black;
 
           if (keyData.primaryChar == '⇧' && isShiftEnabled) {
-            keyColor = Colors.blue[700]!;
+            keyColor = isDarkMode ? Colors.blue[700]! : Colors.blue[200]!;
+            textColor = isDarkMode ? Colors.white : Colors.blue[900]!;
           }
 
           if (keyData.primaryChar == '⌫' && isBackspacePressed) {
-            keyColor = Colors.red[700]!;
+            keyColor = isDarkMode ? Colors.red[700]! : Colors.red[200]!;
+            textColor = isDarkMode ? Colors.white : Colors.red[900]!;
           }
         }
 
