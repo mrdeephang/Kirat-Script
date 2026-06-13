@@ -64,7 +64,9 @@
 
 ```
 lib/
-├── easyconst/
+├── app/
+│   └── app.dart                 
+├── const/
 │   └── colors.dart              # Color constants
 ├── models/
 │   └── kirat_layout.dart        # Keyboard layout data
@@ -135,4 +137,4 @@ GitHub: [@mrdeephang](https://github.com/mrdeephang)
 
 ## License
 
-Copyright © 2025 Deephang Thegim. All rights reserved.
+Copyright © 2026 Deephang Thegim. All rights reserved.
