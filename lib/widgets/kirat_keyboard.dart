@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kirat_script/const/colors.dart';
 import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/widgets/keyboard_key.dart';
 import 'package:kirat_script/widgets/spacebar.dart';
@@ -35,7 +34,7 @@ class KiratKeyboard extends StatelessWidget {
 
         return Container(
           height: 300,
-          color: themeProvider.isDarkMode ? darkColor : Colors.grey[300],
+          color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.grey[300],
           child: Column(
             children: [
               for (int i = 0; i < currentKeys.length; i++)
