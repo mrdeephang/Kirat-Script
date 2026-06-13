@@ -55,13 +55,11 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
 
     if (selection.start == 0 && selection.end == 0) return;
 
-    final startIndex = selection.start == selection.end ? selection.start - 1 : selection.start;
+    final startIndex = selection.start == selection.end
+        ? selection.start - 1
+        : selection.start;
 
-    final newText = currentText.replaceRange(
-      startIndex,
-      selection.end,
-      '',
-    );
+    final newText = currentText.replaceRange(startIndex, selection.end, '');
 
     _textController.value = TextEditingValue(
       text: newText,
