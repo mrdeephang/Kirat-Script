@@ -61,7 +61,10 @@ class _SpaceBarWithLanguageState extends State<SpaceBarWithLanguage> {
           onPointerUp: (_) => _handleTapUp(),
           onPointerCancel: (_) => _handleTapCancel(),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
+            padding: EdgeInsets.symmetric(
+              horizontal: hPadding,
+              vertical: vPadding,
+            ),
             child: Material(
               color: _isPressed ? pressedColor : baseColor,
               borderRadius: BorderRadius.circular(8),
@@ -72,7 +75,7 @@ class _SpaceBarWithLanguageState extends State<SpaceBarWithLanguage> {
                   clipBehavior: Clip.none,
                   children: [
                     Text(
-                      keyboardProvider.currentLanguage == 'English'
+                      keyboardProvider.currentLanguage == 'english'
                           ? 'English'
                           : 'Kirat',
                       style: TextStyle(
@@ -87,7 +90,9 @@ class _SpaceBarWithLanguageState extends State<SpaceBarWithLanguage> {
                         width: 30,
                         height: 3,
                         decoration: BoxDecoration(
-                          color: isDarkMode ? Colors.grey[600] : Colors.grey[400],
+                          color: isDarkMode
+                              ? Colors.grey[600]
+                              : Colors.grey[400],
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
