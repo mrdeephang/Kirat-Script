@@ -3,7 +3,7 @@ import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
 import 'package:kirat_script/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
+import 'package:kirat_script/utils/ime_handler.dart';
 
 class KeyboardKey extends StatefulWidget {
   final KiratKey keyData;
@@ -29,8 +29,8 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   bool _isPressed = false;
 
   void _handleTapDown(String displayText, Color keyColor, Color textColor) {
-    HapticFeedback.lightImpact();
-    SystemSound.play(SystemSoundType.click);
+    ImeHandler.performHapticFeedback();
+    ImeHandler.playClickSound();
     setState(() => _isPressed = true);
     if (!widget.keyData.isSpecial && widget.keyData.primaryChar != ' ') {
       widget.showPopup?.call(context, displayText, keyColor, textColor);
@@ -78,29 +78,34 @@ class _KeyboardKeyState extends State<KeyboardKey> {
           }
         }
 
-        return Container(
-          margin: const EdgeInsets.all(2),
+        return Listener(
+          behavior: HitTestBehavior.opaque,
+          onPointerDown: (_) =>
+              _handleTapDown(displayText, keyColor, textColor),
+          onPointerUp: (_) => _handleTapUp(displayText),
+          onPointerCancel: (_) => _handleTapCancel(),
           child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onLongPress: widget.keyData.primaryChar == '⌫'
                 ? widget.onLongPress
                 : null,
-            child: Listener(
-              behavior: HitTestBehavior.opaque,
-              onPointerDown: (_) =>
-                  _handleTapDown(displayText, keyColor, textColor),
-              onPointerUp: (_) => _handleTapUp(displayText),
-              onPointerCancel: (_) => _handleTapCancel(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 2.5,
+                vertical: 4.0,
+              ),
               child: Material(
                 color: _isPressed
                     ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])
                     : keyColor,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(8),
+                elevation: 1,
                 child: Center(
                   child: Text(
                     displayText,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
                       color: textColor,
                     ),
                   ),

@@ -13,6 +13,9 @@ import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.embedding.android.FlutterView
 import io.flutter.plugin.common.MethodChannel
+import android.media.AudioManager
+import android.content.Context
+import android.content.res.Configuration
 
 class FlutterIMEService : InputMethodService() {
     private lateinit var flutterEngine: FlutterEngine
@@ -77,6 +80,18 @@ class FlutterIMEService : InputMethodService() {
                     ic.deleteSurroundingText(beforeLength, afterLength)
                     result.success(null)
                 }
+                "playClickSound" -> {
+                    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    // Check if system volume is not muted
+                    if (audioManager.ringerMode != AudioManager.RINGER_MODE_SILENT) {
+                        audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD)
+                    }
+                    result.success(null)
+                }
+                "performHapticFeedback" -> {
+                    flutterView.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP)
+                    result.success(null)
+                }
                 else -> result.notImplemented()
             }
         }
@@ -92,7 +107,10 @@ class FlutterIMEService : InputMethodService() {
 
         flutterView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
-        val heightInDp = 370f
+        val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        // 410f (340 keyboard + 70 popup space), 250f (180 keyboard + 70 popup space)
+        val heightInDp = if (isLandscape) 250f else 410f
+
         val heightInPx = android.util.TypedValue.applyDimension(
             android.util.TypedValue.COMPLEX_UNIT_DIP, heightInDp, resources.displayMetrics
         ).toInt()
