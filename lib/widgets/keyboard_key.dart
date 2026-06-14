@@ -3,18 +3,50 @@ import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
 import 'package:kirat_script/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
-class KeyboardKey extends StatelessWidget {
+class KeyboardKey extends StatefulWidget {
   final KiratKey keyData;
   final Function(String) onTap;
   final Function()? onLongPress;
+  final Function(BuildContext, String, Color, Color)? showPopup;
+  final Function()? hidePopup;
 
   const KeyboardKey({
     super.key,
     required this.keyData,
     required this.onTap,
     this.onLongPress,
+    this.showPopup,
+    this.hidePopup,
   });
+
+  @override
+  State<KeyboardKey> createState() => _KeyboardKeyState();
+}
+
+class _KeyboardKeyState extends State<KeyboardKey> {
+  bool _isPressed = false;
+
+  void _handleTapDown(String displayText, Color keyColor, Color textColor) {
+    HapticFeedback.lightImpact();
+    SystemSound.play(SystemSoundType.click);
+    setState(() => _isPressed = true);
+    if (!widget.keyData.isSpecial && widget.keyData.primaryChar != ' ') {
+      widget.showPopup?.call(context, displayText, keyColor, textColor);
+    }
+  }
+
+  void _handleTapUp(String displayText) {
+    setState(() => _isPressed = false);
+    widget.hidePopup?.call();
+    widget.onTap(displayText);
+  }
+
+  void _handleTapCancel() {
+    setState(() => _isPressed = false);
+    widget.hidePopup?.call();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +54,8 @@ class KeyboardKey extends StatelessWidget {
 
     return Consumer<KeyboardProvider>(
       builder: (context, provider, child) {
-        final displayText = provider.getKeyText(keyData);
+        final displayText = provider.getKeyText(widget.keyData);
 
-        // Pre-calculate colors to avoid repeated calculations
         final bool isDarkMode = themeProvider.isDarkMode;
         final bool isShiftEnabled = provider.isShiftEnabled;
         final bool isBackspacePressed = provider.isBackspacePressed;
@@ -32,16 +63,16 @@ class KeyboardKey extends StatelessWidget {
         Color keyColor = isDarkMode ? Colors.grey[800]! : Colors.white;
         Color textColor = isDarkMode ? Colors.white : Colors.black;
 
-        if (keyData.isSpecial) {
+        if (widget.keyData.isSpecial) {
           keyColor = isDarkMode ? Colors.grey[700]! : Colors.grey[400]!;
           textColor = isDarkMode ? Colors.white : Colors.black;
 
-          if (keyData.primaryChar == '⇧' && isShiftEnabled) {
+          if (widget.keyData.primaryChar == '⇧' && isShiftEnabled) {
             keyColor = isDarkMode ? Colors.blue[700]! : Colors.blue[200]!;
             textColor = isDarkMode ? Colors.white : Colors.blue[900]!;
           }
 
-          if (keyData.primaryChar == '⌫' && isBackspacePressed) {
+          if (widget.keyData.primaryChar == '⌫' && isBackspacePressed) {
             keyColor = isDarkMode ? Colors.red[700]! : Colors.red[200]!;
             textColor = isDarkMode ? Colors.white : Colors.red[900]!;
           }
@@ -49,20 +80,29 @@ class KeyboardKey extends StatelessWidget {
 
         return Container(
           margin: const EdgeInsets.all(2),
-          child: Material(
-            color: keyColor,
-            borderRadius: BorderRadius.circular(6),
-            child: InkWell(
-              onTap: () => onTap(displayText),
-              onLongPress: keyData.primaryChar == '⌫' ? onLongPress : null,
-              borderRadius: BorderRadius.circular(6),
-              child: Center(
-                child: Text(
-                  displayText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
+          child: GestureDetector(
+            onLongPress: widget.keyData.primaryChar == '⌫'
+                ? widget.onLongPress
+                : null,
+            child: Listener(
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: (_) =>
+                  _handleTapDown(displayText, keyColor, textColor),
+              onPointerUp: (_) => _handleTapUp(displayText),
+              onPointerCancel: (_) => _handleTapCancel(),
+              child: Material(
+                color: _isPressed
+                    ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])
+                    : keyColor,
+                borderRadius: BorderRadius.circular(6),
+                child: Center(
+                  child: Text(
+                    displayText,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
                   ),
                 ),
               ),

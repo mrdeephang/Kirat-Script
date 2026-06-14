@@ -6,7 +6,23 @@ import 'package:provider/provider.dart';
 import '../providers/keyboard_provider.dart';
 import '../providers/theme_provider.dart';
 
-class KiratKeyboard extends StatelessWidget {
+class PopupData {
+  final Offset position;
+  final Size size;
+  final String text;
+  final Color keyColor;
+  final Color textColor;
+
+  PopupData({
+    required this.position,
+    required this.size,
+    required this.text,
+    required this.keyColor,
+    required this.textColor,
+  });
+}
+
+class KiratKeyboard extends StatefulWidget {
   final Function(String) onKeyPressed;
   final Function() onBackspaceLongPress;
 
@@ -17,15 +33,48 @@ class KiratKeyboard extends StatelessWidget {
   });
 
   @override
+  State<KiratKeyboard> createState() => _KiratKeyboardState();
+}
+
+class _KiratKeyboardState extends State<KiratKeyboard> {
+  final ValueNotifier<PopupData?> _popupNotifier = ValueNotifier(null);
+  final GlobalKey _keyboardKey = GlobalKey();
+
+  void _showPopup(BuildContext keyContext, String text, Color keyColor, Color textColor) {
+    final keyBox = keyContext.findRenderObject() as RenderBox?;
+    final keyboardBox = _keyboardKey.currentContext?.findRenderObject() as RenderBox?;
+    
+    if (keyBox == null || keyboardBox == null) return;
+
+    final offset = keyBox.localToGlobal(Offset.zero, ancestor: keyboardBox);
+    _popupNotifier.value = PopupData(
+      position: offset,
+      size: keyBox.size,
+      text: text,
+      keyColor: keyColor,
+      textColor: textColor,
+    );
+  }
+
+  void _hidePopup() {
+    _popupNotifier.value = null;
+  }
+
+  @override
+  void dispose() {
+    _popupNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Consumer<KeyboardProvider>(
       builder: (context, keyboardProvider, child) {
-        // Only rebuild when absolutely necessary
         if (keyboardProvider.isBackspacePressed) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            onKeyPressed('⌫');
+            widget.onKeyPressed('⌫');
           });
         }
 
@@ -33,17 +82,68 @@ class KiratKeyboard extends StatelessWidget {
         final lastRowIndex = currentKeys.length - 1;
 
         return Container(
-          height: 300,
-          color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.grey[300],
-          child: Column(
+          key: _keyboardKey,
+          height: 370,
+          color: Colors.transparent,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.bottomCenter,
             children: [
-              for (int i = 0; i < currentKeys.length; i++)
-                _buildKeyboardRow(
-                  i,
-                  currentKeys[i],
-                  lastRowIndex,
-                  keyboardProvider,
+              Container(
+                height: 300,
+                color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.grey[300],
+                child: Column(
+                  children: [
+                    for (int i = 0; i < currentKeys.length; i++)
+                      _buildKeyboardRow(
+                        i,
+                        currentKeys[i],
+                        lastRowIndex,
+                        keyboardProvider,
+                      ),
+                  ],
                 ),
+              ),
+              ValueListenableBuilder<PopupData?>(
+                valueListenable: _popupNotifier,
+                builder: (context, popupData, child) {
+                  if (popupData == null) return const SizedBox.shrink();
+
+                  return Positioned(
+                    left: popupData.position.dx - (popupData.size.width * 0.25),
+                    top: popupData.position.dy - popupData.size.height - 10,
+                    width: popupData.size.width * 1.5,
+                    height: popupData.size.height * 1.8,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: popupData.keyColor,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black38,
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          popupData.text,
+                          style: TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.w500,
+                            color: popupData.textColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         );
@@ -69,7 +169,7 @@ class KiratKeyboard extends StatelessWidget {
                         'spacebar_${keyboardProvider.currentLanguage}_${keyboardProvider.isSymbolsMode}',
                       ),
                       keyData: key,
-                      onTap: onKeyPressed,
+                      onTap: widget.onKeyPressed,
                     )
                   : KeyboardKey(
                       key: ValueKey(
@@ -81,13 +181,15 @@ class KiratKeyboard extends StatelessWidget {
                             key.primaryChar == ' ' ||
                             key.primaryChar == '⌫' ||
                             key.primaryChar == '⏎') {
-                          onKeyPressed(text);
+                          widget.onKeyPressed(text);
                         }
                         keyboardProvider.handleKeyPress(key);
                       },
                       onLongPress: key.primaryChar == '⌫'
-                          ? onBackspaceLongPress
+                          ? widget.onBackspaceLongPress
                           : null,
+                      showPopup: _showPopup,
+                      hidePopup: _hidePopup,
                     ),
             ),
         ],
