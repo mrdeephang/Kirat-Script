@@ -96,7 +96,7 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
               title: Consumer<KeyboardProvider>(
                 builder: (context, keyboardProvider, child) {
                   return const Text(
-                    'Kirat Keyboard',
+                    'Kirat Script',
                     style: TextStyle(color: Colors.white),
                   );
                 },
@@ -144,7 +144,7 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
                     readOnly: true,
                     showCursor: true,
                     decoration: InputDecoration(
-                      hintText: 'Tap below to type with Kirat keyboard...',
+                      hintText: 'Tap below to type with Kirat Script...',
                       hintStyle: TextStyle(
                         fontSize: 14,
                         color: themeProvider.isDarkMode
