@@ -36,9 +36,6 @@ class IMEApp extends StatelessWidget {
                 ImeHandler.commitText(text);
               }
             },
-            onBackspaceLongPress: () {
-              ImeHandler.sendBackspace();
-            },
           ),
         ),
       ),

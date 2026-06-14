@@ -24,12 +24,10 @@ class PopupData {
 
 class KiratKeyboard extends StatefulWidget {
   final Function(String) onKeyPressed;
-  final Function() onBackspaceLongPress;
 
   const KiratKeyboard({
     super.key,
     required this.onKeyPressed,
-    required this.onBackspaceLongPress,
   });
 
   @override
@@ -40,10 +38,16 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
   final ValueNotifier<PopupData?> _popupNotifier = ValueNotifier(null);
   final GlobalKey _keyboardKey = GlobalKey();
 
-  void _showPopup(BuildContext keyContext, String text, Color keyColor, Color textColor) {
+  void _showPopup(
+    BuildContext keyContext,
+    String text,
+    Color keyColor,
+    Color textColor,
+  ) {
     final keyBox = keyContext.findRenderObject() as RenderBox?;
-    final keyboardBox = _keyboardKey.currentContext?.findRenderObject() as RenderBox?;
-    
+    final keyboardBox =
+        _keyboardKey.currentContext?.findRenderObject() as RenderBox?;
+
     if (keyBox == null || keyboardBox == null) return;
 
     final offset = keyBox.localToGlobal(Offset.zero, ancestor: keyboardBox);
@@ -69,6 +73,14 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // Dynamically adjust height for landscape to prevent overflow
+    // Standard portrait height adjusted to 340 for a comfortable size
+    final double keyboardHeight = isLandscape ? 180.0 : 340.0;
+    final double containerHeight =
+        keyboardHeight + 70.0; // 70px extra for the popup preview
 
     return Consumer<KeyboardProvider>(
       builder: (context, keyboardProvider, child) {
@@ -83,15 +95,17 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
 
         return Container(
           key: _keyboardKey,
-          height: 370,
+          height: containerHeight,
           color: Colors.transparent,
           child: Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.bottomCenter,
             children: [
               Container(
-                height: 300,
-                color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.grey[300],
+                height: keyboardHeight,
+                color: themeProvider.isDarkMode
+                    ? Colors.grey[900]
+                    : Colors.grey[300],
                 child: Column(
                   children: [
                     for (int i = 0; i < currentKeys.length; i++)
@@ -173,7 +187,7 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                     )
                   : KeyboardKey(
                       key: ValueKey(
-                        'key_${key.primaryChar}_${keyboardProvider.currentLanguage}_${keyboardProvider.isSymbolsMode}',
+                        'key_${key.primaryChar}_${keyboardProvider.currentLanguage}_${keyboardProvider.isSymbolsMode}_${keyboardProvider.isShiftEnabled}',
                       ),
                       keyData: key,
                       onTap: (text) {
@@ -185,9 +199,6 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                         }
                         keyboardProvider.handleKeyPress(key);
                       },
-                      onLongPress: key.primaryChar == '⌫'
-                          ? widget.onBackspaceLongPress
-                          : null,
                       showPopup: _showPopup,
                       hidePopup: _hidePopup,
                     ),

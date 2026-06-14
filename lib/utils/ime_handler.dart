@@ -41,4 +41,26 @@ class ImeHandler {
       debugPrint("Failed to send enter: '${e.message}'.");
     }
   }
+
+  static Future<void> playClickSound() async {
+    try {
+      await _channel.invokeMethod('playClickSound');
+    } on PlatformException catch (_) {
+      // Fallback if not running as IME (e.g., inside the main app screen)
+      SystemSound.play(SystemSoundType.click);
+    } on MissingPluginException catch (_) {
+      SystemSound.play(SystemSoundType.click);
+    }
+  }
+
+  static Future<void> performHapticFeedback() async {
+    try {
+      await _channel.invokeMethod('performHapticFeedback');
+    } on PlatformException catch (_) {
+      // Fallback if not running as IME
+      HapticFeedback.lightImpact();
+    } on MissingPluginException catch (_) {
+      HapticFeedback.lightImpact();
+    }
+  }
 }
