@@ -3,6 +3,7 @@ import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
 import 'package:kirat_script/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 class KeyboardKey extends StatefulWidget {
   final KiratKey keyData;
@@ -28,6 +29,8 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   bool _isPressed = false;
 
   void _handleTapDown(String displayText, Color keyColor, Color textColor) {
+    HapticFeedback.lightImpact();
+    SystemSound.play(SystemSoundType.click);
     setState(() => _isPressed = true);
     if (!widget.keyData.isSpecial && widget.keyData.primaryChar != ' ') {
       widget.showPopup?.call(context, displayText, keyColor, textColor);
@@ -37,6 +40,7 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   void _handleTapUp(String displayText) {
     setState(() => _isPressed = false);
     widget.hidePopup?.call();
+    widget.onTap(displayText);
   }
 
   void _handleTapCancel() {
@@ -77,25 +81,28 @@ class _KeyboardKeyState extends State<KeyboardKey> {
         return Container(
           margin: const EdgeInsets.all(2),
           child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTapDown: (_) => _handleTapDown(displayText, keyColor, textColor),
-            onTapUp: (_) => _handleTapUp(displayText),
-            onTapCancel: _handleTapCancel,
-            onTap: () {
-              widget.hidePopup?.call();
-              widget.onTap(displayText);
-            },
-            onLongPress: widget.keyData.primaryChar == '⌫' ? widget.onLongPress : null,
-            child: Material(
-              color: _isPressed ? (isDarkMode ? Colors.grey[600] : Colors.grey[300]) : keyColor,
-              borderRadius: BorderRadius.circular(6),
-              child: Center(
-                child: Text(
-                  displayText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
+            onLongPress: widget.keyData.primaryChar == '⌫'
+                ? widget.onLongPress
+                : null,
+            child: Listener(
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: (_) =>
+                  _handleTapDown(displayText, keyColor, textColor),
+              onPointerUp: (_) => _handleTapUp(displayText),
+              onPointerCancel: (_) => _handleTapCancel(),
+              child: Material(
+                color: _isPressed
+                    ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])
+                    : keyColor,
+                borderRadius: BorderRadius.circular(6),
+                child: Center(
+                  child: Text(
+                    displayText,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
                   ),
                 ),
               ),

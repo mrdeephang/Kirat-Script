@@ -119,22 +119,23 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: popupData.keyColor,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           boxShadow: const [
                             BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4,
-                              offset: Offset(0, 2),
+                              color: Colors.black38,
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                              offset: Offset(0, 4),
                             ),
                           ],
                         ),
-                        alignment: Alignment.topCenter,
-                        padding: const EdgeInsets.only(top: 8),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: Text(
                           popupData.text,
                           style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 34,
+                            fontWeight: FontWeight.w500,
                             color: popupData.textColor,
                           ),
                         ),

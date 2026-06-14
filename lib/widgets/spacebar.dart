@@ -3,8 +3,9 @@ import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
 import 'package:kirat_script/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
-class SpaceBarWithLanguage extends StatelessWidget {
+class SpaceBarWithLanguage extends StatefulWidget {
   final KiratKey keyData;
   final Function(String) onTap;
 
@@ -15,24 +16,52 @@ class SpaceBarWithLanguage extends StatelessWidget {
   });
 
   @override
+  State<SpaceBarWithLanguage> createState() => _SpaceBarWithLanguageState();
+}
+
+class _SpaceBarWithLanguageState extends State<SpaceBarWithLanguage> {
+  bool _isPressed = false;
+
+  void _handleTapDown() {
+    HapticFeedback.lightImpact();
+    SystemSound.play(SystemSoundType.click);
+    setState(() => _isPressed = true);
+  }
+
+  void _handleTapUp() {
+    setState(() => _isPressed = false);
+    widget.onTap(widget.keyData.primaryChar);
+  }
+
+  void _handleTapCancel() {
+    setState(() => _isPressed = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Consumer<KeyboardProvider>(
       builder: (context, keyboardProvider, child) {
+        final isDarkMode = themeProvider.isDarkMode;
+        final baseColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+        final pressedColor = isDarkMode ? Colors.grey[600]! : Colors.grey[300]!;
+
         return Container(
           margin: const EdgeInsets.all(2),
-          child: Material(
-            color: themeProvider.isDarkMode ? Colors.grey[800]! : Colors.white,
-            borderRadius: BorderRadius.circular(6),
-            child: InkWell(
-              onTap: () => onTap(keyData.primaryChar),
+          child: Listener(
+            behavior: HitTestBehavior.opaque,
+            onPointerDown: (_) => _handleTapDown(),
+            onPointerUp: (_) => _handleTapUp(),
+            onPointerCancel: (_) => _handleTapCancel(),
+            child: Material(
+              color: _isPressed ? pressedColor : baseColor,
               borderRadius: BorderRadius.circular(6),
               child: Stack(
                 children: [
                   Center(
                     child: Text(
-                      keyData.primaryChar,
+                      widget.keyData.primaryChar,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -46,9 +75,7 @@ class SpaceBarWithLanguage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: themeProvider.isDarkMode
-                            ? Colors.grey[400]
-                            : Colors.grey[500],
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[500],
                       ),
                     ),
                   ),
