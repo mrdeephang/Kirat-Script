@@ -18,6 +18,10 @@ import android.content.Context
 import android.content.res.Configuration
 
 class FlutterIMEService : InputMethodService() {
+    companion object {
+        private var sharedEngine: FlutterEngine? = null
+    }
+
     private lateinit var flutterEngine: FlutterEngine
     private lateinit var flutterView: FlutterView
     private lateinit var channel: MethodChannel
@@ -27,18 +31,18 @@ class FlutterIMEService : InputMethodService() {
     override fun onCreate() {
         super.onCreate()
 
-        // Create a FlutterEngine
-        flutterEngine = FlutterEngine(this)
-
-        // Find the Dart entrypoint for the IME (we will create `keyboardMain` in Dart)
-        val dartEntrypoint = DartExecutor.DartEntrypoint(
-            FlutterInjector.instance().flutterLoader().findAppBundlePath(),
-            "keyboardMain"
-        )
-        flutterEngine.dartExecutor.executeDartEntrypoint(dartEntrypoint)
-
-        // Cache the engine
-        FlutterEngineCache.getInstance().put(ENGINE_ID, flutterEngine)
+        var engine = sharedEngine
+        if (engine == null) {
+            engine = FlutterEngine(applicationContext)
+            val dartEntrypoint = DartExecutor.DartEntrypoint(
+                FlutterInjector.instance().flutterLoader().findAppBundlePath(),
+                "keyboardMain"
+            )
+            engine.dartExecutor.executeDartEntrypoint(dartEntrypoint)
+            FlutterEngineCache.getInstance().put(ENGINE_ID, engine)
+            sharedEngine = engine
+        }
+        flutterEngine = engine
 
         // Set up MethodChannel
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_NAME)
@@ -97,14 +101,17 @@ class FlutterIMEService : InputMethodService() {
         }
     }
 
-    override fun onCreateInputView(): View {
-        val layout = layoutInflater.inflate(R.layout.keyboard_view, null) as FrameLayout
-        val textureView = io.flutter.embedding.android.FlutterTextureView(this)
-        flutterView = FlutterView(this, textureView)
-        flutterView.attachToFlutterEngine(flutterEngine)
-        flutterEngine.lifecycleChannel.appIsResumed()
+    private var cachedLayout: FrameLayout? = null
 
-        flutterView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+    override fun onCreateInputView(): View {
+        if (cachedLayout == null) {
+            val layout = layoutInflater.inflate(R.layout.keyboard_view, null) as FrameLayout
+            val textureView = io.flutter.embedding.android.FlutterTextureView(this)
+            flutterView = FlutterView(this, textureView)
+            flutterView.attachToFlutterEngine(flutterEngine)
+            flutterView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            cachedLayout = layout
+        }
 
         val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         // 410f (340 keyboard + 70 popup space), 250f (180 keyboard + 70 popup space)
@@ -114,13 +121,26 @@ class FlutterIMEService : InputMethodService() {
             android.util.TypedValue.COMPLEX_UNIT_DIP, heightInDp, resources.displayMetrics
         ).toInt()
 
-        val params = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            heightInPx
-        )
-        layout.addView(flutterView, params)
+        val parent = flutterView.parent as? ViewGroup
+        if (parent != null && parent != cachedLayout) {
+            parent.removeView(flutterView)
+        }
 
-        return layout
+        if (flutterView.parent == null) {
+            val params = FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                heightInPx
+            )
+            cachedLayout?.addView(flutterView, params)
+        } else {
+            flutterView.layoutParams = FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                heightInPx
+            )
+        }
+
+        flutterEngine.lifecycleChannel.appIsResumed()
+        return cachedLayout!!
     }
 
     override fun onWindowShown() {
@@ -136,10 +156,10 @@ class FlutterIMEService : InputMethodService() {
     }
 
     override fun onDestroy() {
-        flutterEngine.lifecycleChannel.appIsDetached()
-        flutterView.detachFromFlutterEngine()
-        FlutterEngineCache.getInstance().remove(ENGINE_ID)
-        flutterEngine.destroy()
+        if (::flutterView.isInitialized) {
+            flutterView.detachFromFlutterEngine()
+        }
+        cachedLayout = null
         super.onDestroy()
     }
 }
