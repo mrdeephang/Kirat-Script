@@ -55,7 +55,10 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
     final query = widget.keyboardProvider.emojiSearchQuery;
     if (query.isNotEmpty) {
       final utils = EmojiPickerUtils();
-      final results = await utils.searchEmoji(query, widget.state.categoryEmoji);
+      final results = await utils.searchEmoji(
+        query,
+        widget.state.categoryEmoji,
+      );
       if (mounted) {
         setState(() {
           _searchResults = results;
@@ -73,7 +76,7 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
   @override
   Widget build(BuildContext context) {
     final isDark = widget.themeProvider.isDarkMode;
-    
+
     return Column(
       children: [
         // Top bar with close button and search query text
@@ -83,8 +86,12 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
           child: Row(
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_back, color: isDark ? Colors.white : Colors.black),
-                onPressed: widget.showEmojiView, // Return to standard emoji grid
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: isDark ? Colors.white : Colors.black,
+                ),
+                onPressed:
+                    widget.showEmojiView, // Return to standard emoji grid
               ),
               Expanded(
                 child: RichText(
@@ -101,7 +108,10 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
                             ),
                             TextSpan(
                               text: "Search emojis...",
-                              style: const TextStyle(color: Colors.grey, fontSize: 16),
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
                             ),
                           ]
                         : [
@@ -127,7 +137,7 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
             ],
           ),
         ),
-        
+
         // Search Results Row
         Container(
           height: 50,
@@ -136,7 +146,9 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
               ? Center(
                   child: Text(
                     "No results",
-                    style: TextStyle(color: isDark ? Colors.white54 : Colors.black54),
+                    style: TextStyle(
+                      color: isDark ? Colors.white54 : Colors.black54,
+                    ),
                   ),
                 )
               : ListView.builder(
@@ -165,9 +177,7 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
         ),
 
         // The Keyboard Keys
-        Expanded(
-          child: widget.keyboardRows,
-        ),
+        Expanded(child: widget.keyboardRows),
       ],
     );
   }
