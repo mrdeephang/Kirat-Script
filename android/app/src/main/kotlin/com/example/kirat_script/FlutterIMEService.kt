@@ -99,11 +99,10 @@ class FlutterIMEService : InputMethodService() {
 
     override fun onCreateInputView(): View {
         val layout = layoutInflater.inflate(R.layout.keyboard_view, null) as FrameLayout
-
-        val surfaceView = io.flutter.embedding.android.FlutterSurfaceView(this, true)
-        
-        flutterView = FlutterView(this, surfaceView)
+        val textureView = io.flutter.embedding.android.FlutterTextureView(this)
+        flutterView = FlutterView(this, textureView)
         flutterView.attachToFlutterEngine(flutterEngine)
+        flutterEngine.lifecycleChannel.appIsResumed()
 
         flutterView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
@@ -124,7 +123,20 @@ class FlutterIMEService : InputMethodService() {
         return layout
     }
 
+    override fun onWindowShown() {
+        super.onWindowShown()
+        // Wake up the Flutter render pipeline
+        flutterEngine.lifecycleChannel.appIsResumed()
+    }
+
+    override fun onWindowHidden() {
+        super.onWindowHidden()
+        // Pause the Flutter render pipeline to save battery
+        flutterEngine.lifecycleChannel.appIsPaused()
+    }
+
     override fun onDestroy() {
+        flutterEngine.lifecycleChannel.appIsDetached()
         flutterView.detachFromFlutterEngine()
         FlutterEngineCache.getInstance().remove(ENGINE_ID)
         flutterEngine.destroy()

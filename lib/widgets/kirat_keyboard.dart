@@ -189,7 +189,7 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                     )
                   : KeyboardKey(
                       key: ValueKey(
-                        'key_${key.primaryChar}_${keyboardProvider.currentLanguage}_${keyboardProvider.isSymbolsMode}',
+                        'key_${key.primaryChar}_${keyboardProvider.currentLanguage}_${keyboardProvider.isSymbolsMode}_${keyboardProvider.isShiftEnabled}',
                       ),
                       keyData: key,
                       onTap: (text) {
