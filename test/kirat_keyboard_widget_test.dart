@@ -15,19 +15,21 @@ void main() {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: MaterialApp(
-        home: Scaffold(
-          body: KiratKeyboard(onKeyPressed: onKeyPressed),
-        ),
+        home: Scaffold(body: KiratKeyboard(onKeyPressed: onKeyPressed)),
       ),
     );
   }
 
-  testWidgets('KiratKeyboard renders keys and triggers onKeyPressed', (WidgetTester tester) async {
+  testWidgets('KiratKeyboard renders keys and triggers onKeyPressed', (
+    WidgetTester tester,
+  ) async {
     String pressedKey = '';
-    
-    await tester.pumpWidget(createKeyboardApp((key) {
-      pressedKey = key;
-    }));
+
+    await tester.pumpWidget(
+      createKeyboardApp((key) {
+        pressedKey = key;
+      }),
+    );
 
     // The keyboard should render a number of KeyboardKey widgets.
     expect(find.byType(KeyboardKey), findsWidgets);

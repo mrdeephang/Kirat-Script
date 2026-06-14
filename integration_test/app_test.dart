@@ -7,7 +7,9 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('End-to-End App Test', () {
-    testWidgets('Type "q" into the TextField using the virtual keyboard', (tester) async {
+    testWidgets('Type "q" into the TextField using the virtual keyboard', (
+      tester,
+    ) async {
       app.main();
       // Wait for the app to settle
       await tester.pumpAndSettle();
@@ -25,7 +27,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // Find the spacebar and tap it
-      final spaceKey = find.text('English'); // In english layout, spacebar text is 'English'
+      final spaceKey = find.text(
+        'English',
+      ); // In english layout, spacebar text is 'English'
       if (spaceKey.evaluate().isNotEmpty) {
         await tester.tap(spaceKey);
         await tester.pumpAndSettle();

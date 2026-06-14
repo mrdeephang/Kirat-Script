@@ -19,25 +19,37 @@ void main() {
 
     test('toggleLanguage switches between english and kirat', () {
       expect(provider.currentLanguage, 'kirat');
-      provider.handleKeyPress(const KiratKey(primaryChar: '🌐', isSpecial: true));
+      provider.handleKeyPress(
+        const KiratKey(primaryChar: '🌐', isSpecial: true),
+      );
       expect(provider.currentLanguage, 'english');
-      provider.handleKeyPress(const KiratKey(primaryChar: '🌐', isSpecial: true));
+      provider.handleKeyPress(
+        const KiratKey(primaryChar: '🌐', isSpecial: true),
+      );
       expect(provider.currentLanguage, 'kirat');
     });
 
     test('toggleShift enables and disables shift mode', () {
       expect(provider.isShiftEnabled, isFalse);
-      provider.handleKeyPress(const KiratKey(primaryChar: '⇧', isSpecial: true));
+      provider.handleKeyPress(
+        const KiratKey(primaryChar: '⇧', isSpecial: true),
+      );
       expect(provider.isShiftEnabled, isTrue);
-      provider.handleKeyPress(const KiratKey(primaryChar: '⇧', isSpecial: true));
+      provider.handleKeyPress(
+        const KiratKey(primaryChar: '⇧', isSpecial: true),
+      );
       expect(provider.isShiftEnabled, isFalse);
     });
 
     test('Shift mode disables after typing a regular character', () {
-      provider.handleKeyPress(const KiratKey(primaryChar: '⇧', isSpecial: true));
+      provider.handleKeyPress(
+        const KiratKey(primaryChar: '⇧', isSpecial: true),
+      );
       expect(provider.isShiftEnabled, isTrue);
       // Type a normal character
-      provider.handleKeyPress(const KiratKey(primaryChar: 'A', isSpecial: false));
+      provider.handleKeyPress(
+        const KiratKey(primaryChar: 'A', isSpecial: false),
+      );
       expect(provider.isShiftEnabled, isFalse);
     });
   });

@@ -128,7 +128,10 @@ class _KeyboardKeyState extends State<KeyboardKey> {
           onPointerUp: (_) => _handleTapUp(displayText, provider),
           onPointerCancel: (_) => _handleTapCancel(provider),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
+            padding: EdgeInsets.symmetric(
+              horizontal: hPadding,
+              vertical: vPadding,
+            ),
             child: Material(
               color: _isPressed
                   ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])

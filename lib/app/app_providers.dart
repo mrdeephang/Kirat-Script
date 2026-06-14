@@ -6,10 +6,7 @@ import '../providers/theme_provider.dart';
 class AppProviders extends StatelessWidget {
   final Widget child;
 
-  const AppProviders({
-    super.key,
-    required this.child,
-  });
+  const AppProviders({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

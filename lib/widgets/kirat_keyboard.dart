@@ -25,10 +25,7 @@ class PopupData {
 class KiratKeyboard extends StatefulWidget {
   final Function(String) onKeyPressed;
 
-  const KiratKeyboard({
-    super.key,
-    required this.onKeyPressed,
-  });
+  const KiratKeyboard({super.key, required this.onKeyPressed});
 
   @override
   State<KiratKeyboard> createState() => _KiratKeyboardState();
@@ -79,7 +76,9 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
     // Dynamically adjust height to prevent overflow.
     // If landscape AND the screen height is short (e.g., mobile phones < 500px), use 180.
     // Otherwise (desktop/web/laptops or portrait), use 340 for a comfortable size.
-    final double keyboardHeight = (isLandscape && size.height < 500) ? 180.0 : 340.0;
+    final double keyboardHeight = (isLandscape && size.height < 500)
+        ? 180.0
+        : 340.0;
     final double containerHeight =
         keyboardHeight + 70.0; // 70px extra for the popup preview
 
