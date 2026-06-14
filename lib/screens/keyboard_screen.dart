@@ -52,9 +52,17 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
 
     if (selection.start == 0 && selection.end == 0) return;
 
-    final startIndex = selection.start == selection.end
-        ? selection.start - 1
-        : selection.start;
+    int startIndex;
+    if (selection.start == selection.end) {
+      final textBeforeCursor = currentText.substring(0, selection.start);
+      if (textBeforeCursor.isNotEmpty) {
+        startIndex = selection.start - textBeforeCursor.characters.last.length;
+      } else {
+        startIndex = 0;
+      }
+    } else {
+      startIndex = selection.start;
+    }
 
     final newText = currentText.replaceRange(startIndex, selection.end, '');
 
@@ -65,16 +73,6 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
   }
 
   void _handleKeyPress(String text) {
-    if (text == '⇧' ||
-        text == '🌐' ||
-        text == '😀' ||
-        text == '!#1' ||
-        text == 'ABC' ||
-        text == '!#᥇' ||
-        text == 'ᤁᤂᤃ') {
-      return;
-    }
-
     if (text == '⌫') {
       _deleteText();
     } else if (text == '⏎') {
