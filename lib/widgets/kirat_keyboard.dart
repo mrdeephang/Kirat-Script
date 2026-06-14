@@ -240,6 +240,14 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                     ? Colors.grey[900]!
                     : Colors.grey[300]!,
                 columns: 8,
+                noRecents: Text(
+                  'No Recents',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: themeProvider.isDarkMode ? Colors.white54 : Colors.black26,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
               categoryViewConfig: CategoryViewConfig(
                 backgroundColor: themeProvider.isDarkMode
