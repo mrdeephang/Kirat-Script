@@ -67,6 +67,7 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
   void _handleKeyPress(String text) {
     if (text == '⇧' ||
         text == '🌐' ||
+        text == '😀' ||
         text == '!#1' ||
         text == 'ABC' ||
         text == '!#᥇' ||
