@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "installCommand": "git clone https://github.com/flutter/flutter.git -b stable --depth 1 flutter",
+  "buildCommand": "./flutter/bin/flutter build web --release",
+  "outputDirectory": "build/web",
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/.*",
+      "dest": "/index.html"
+    }
+  ]
+}
