@@ -6,12 +6,14 @@ import 'package:kirat_script/models/kirat_layout.dart';
 class KeyboardProvider with ChangeNotifier {
   bool _isShiftEnabled = false;
   bool _isSymbolsMode = false;
+  bool _isEmojiMode = false;
   String _currentLanguage = 'kirat';
   bool _isBackspacePressed = false;
   Timer? _backspaceTimer;
 
   bool get isShiftEnabled => _isShiftEnabled;
   bool get isSymbolsMode => _isSymbolsMode;
+  bool get isEmojiMode => _isEmojiMode;
   String get currentLanguage => _currentLanguage;
   bool get isBackspacePressed => _isBackspacePressed;
 
@@ -32,6 +34,8 @@ class KeyboardProvider with ChangeNotifier {
       toggleShift();
     } else if (key.primaryChar == '🌐') {
       toggleLanguage();
+    } else if (key.primaryChar == '😀') {
+      toggleEmojiMode();
     } else if (key.primaryChar == '!#1' ||
         key.primaryChar == 'ᤁᤂᤃ' ||
         key.primaryChar == 'ABC' ||
@@ -84,6 +88,13 @@ class KeyboardProvider with ChangeNotifier {
   void toggleSymbolsMode() {
     _isSymbolsMode = !_isSymbolsMode;
     _isShiftEnabled = false;
+    notifyListeners();
+  }
+
+  void toggleEmojiMode() {
+    _isEmojiMode = !_isEmojiMode;
+    _isShiftEnabled = false;
+    _isSymbolsMode = false;
     notifyListeners();
   }
 

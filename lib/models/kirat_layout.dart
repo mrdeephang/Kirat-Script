@@ -79,11 +79,12 @@ class KiratKeyboardLayout {
     // Row 6 - Space and Controls
     [
       KiratKey(primaryChar: '!#᥇', isSpecial: true, width: 1.5),
-      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.5),
-      KiratKey(primaryChar: ','),
+      KiratKey(primaryChar: '😀', isSpecial: true, width: 1.0),
+      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.0),
+      KiratKey(primaryChar: ',', width: 1.0),
       KiratKey(primaryChar: ' ', width: 3.0),
-      KiratKey(primaryChar: '॥'),
-      KiratKey(primaryChar: '.'),
+      KiratKey(primaryChar: '॥', width: 1.0),
+      KiratKey(primaryChar: '.', width: 1.0),
       KiratKey(primaryChar: '⏎', isSpecial: true, width: 1.5),
     ],
   ];
@@ -157,7 +158,8 @@ class KiratKeyboardLayout {
     // Row 6 - Space and enter
     [
       KiratKey(primaryChar: 'ᤁᤂᤃ', isSpecial: true, width: 1.5),
-      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.5),
+      KiratKey(primaryChar: '😀', isSpecial: true, width: 1.0),
+      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.0),
       KiratKey(primaryChar: ',', width: 1.0),
       KiratKey(primaryChar: ' ', width: 3.0),
       KiratKey(primaryChar: '॥', width: 1.0),
@@ -221,7 +223,8 @@ class KiratKeyboardLayout {
     // Row 5 - Space and enter
     [
       KiratKey(primaryChar: '!#1', isSpecial: true, width: 1.5),
-      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.5),
+      KiratKey(primaryChar: '😀', isSpecial: true, width: 1.0),
+      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.0),
       KiratKey(primaryChar: ',', width: 1.0),
       KiratKey(primaryChar: ' ', width: 3.0),
       KiratKey(primaryChar: '.', width: 1.0),
@@ -298,7 +301,8 @@ class KiratKeyboardLayout {
     // Row 6 - Space and enter
     [
       KiratKey(primaryChar: 'ABC', isSpecial: true, width: 1.5),
-      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.5),
+      KiratKey(primaryChar: '😀', isSpecial: true, width: 1.0),
+      KiratKey(primaryChar: '🌐', isSpecial: true, width: 1.0),
       KiratKey(primaryChar: ',', width: 1.0),
       KiratKey(primaryChar: ' ', width: 3.0),
       KiratKey(primaryChar: '.', width: 1.0),

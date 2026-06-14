@@ -3,6 +3,7 @@ import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/widgets/keyboard_key.dart';
 import 'package:kirat_script/widgets/spacebar.dart';
 import 'package:provider/provider.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import '../providers/keyboard_provider.dart';
 import '../providers/theme_provider.dart';
 
@@ -99,20 +100,22 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                 alignment: Alignment.center,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 800),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < currentKeys.length; i++)
-                          _buildKeyboardRow(
-                            i,
-                            currentKeys[i],
-                            lastRowIndex,
-                            keyboardProvider,
+                  child: keyboardProvider.isEmojiMode
+                      ? _buildEmojiPicker(keyboardProvider, themeProvider)
+                      : SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              for (int i = 0; i < currentKeys.length; i++)
+                                _buildKeyboardRow(
+                                  i,
+                                  currentKeys[i],
+                                  lastRowIndex,
+                                  keyboardProvider,
+                                ),
+                            ],
                           ),
-                      ],
-                    ),
-                  ),
+                        ),
                 ),
               ),
               ValueListenableBuilder<PopupData?>(
@@ -202,6 +205,64 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
             ),
         ],
       ),
+    );
+  }
+
+  Widget _buildEmojiPicker(KeyboardProvider keyboardProvider, ThemeProvider themeProvider) {
+    return Column(
+      children: [
+        Expanded(
+          child: EmojiPicker(
+            onEmojiSelected: (category, emoji) {
+              widget.onKeyPressed(emoji.emoji);
+            },
+            config: Config(
+              emojiViewConfig: EmojiViewConfig(
+                backgroundColor: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.grey[300]!,
+                columns: 8,
+              ),
+              categoryViewConfig: CategoryViewConfig(
+                backgroundColor: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.grey[300]!,
+              ),
+              bottomActionBarConfig: const BottomActionBarConfig(
+                enabled: false,
+              ),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 15,
+              child: KeyboardKey(
+                key: const ValueKey('emoji_abc'),
+                keyData: const KiratKey(primaryChar: 'ABC', isSpecial: true, width: 1.5),
+                onTap: (_) => keyboardProvider.toggleEmojiMode(),
+                showPopup: _showPopup,
+                hidePopup: _hidePopup,
+              ),
+            ),
+            Expanded(
+              flex: 70,
+              child: SpaceBarWithLanguage(
+                key: const ValueKey('emoji_space'),
+                keyData: const KiratKey(primaryChar: ' ', width: 7.0),
+                onTap: widget.onKeyPressed,
+              ),
+            ),
+            Expanded(
+              flex: 15,
+              child: KeyboardKey(
+                key: const ValueKey('emoji_backspace'),
+                keyData: const KiratKey(primaryChar: '⌫', isSpecial: true, width: 1.5),
+                onTap: (_) => widget.onKeyPressed('⌫'),
+                showPopup: _showPopup,
+                hidePopup: _hidePopup,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

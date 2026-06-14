@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^2.5.3
   vibration: ^3.1.4
   flutter_launcher_icons: ^0.14.4
+  emoji_picker_flutter: ^4.4.0
 
 dev_dependencies:
   flutter_test:
