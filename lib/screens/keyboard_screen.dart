@@ -86,79 +86,85 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final size = MediaQuery.of(context).size;
+    final isLandscapeSmall = size.width > size.height && size.height < 500;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Consumer<KeyboardProvider>(
-          builder: (context, keyboardProvider, child) {
-            return const Text(
-              'Kirat Keyboard',
-              style: TextStyle(color: Colors.white),
-            );
-          },
-        ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        actions: [
-          IconButton(
-            icon: Icon(
-              themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-              color: Colors.white,
+      appBar: isLandscapeSmall
+          ? null
+          : AppBar(
+              title: Consumer<KeyboardProvider>(
+                builder: (context, keyboardProvider, child) {
+                  return const Text(
+                    'Kirat Keyboard',
+                    style: TextStyle(color: Colors.white),
+                  );
+                },
+              ),
+              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    themeProvider.isDarkMode
+                        ? Icons.dark_mode
+                        : Icons.light_mode,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => themeProvider.toggleTheme(),
+                  tooltip: 'Toggle theme',
+                ),
+              ],
             ),
-            onPressed: () => themeProvider.toggleTheme(),
-            tooltip: 'Toggle theme',
-          ),
-        ],
-      ),
       body: GestureDetector(
         onTap: () {
           // system keyboard won't open on typing
           _focusNode.unfocus();
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  minLines: 1,
-                  maxLines: null,
-                  textAlign: TextAlign.left,
-                  textAlignVertical: TextAlignVertical.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: themeProvider.isDarkMode
-                        ? Colors.white
-                        : Colors.black,
-                    letterSpacing: 1.2,
-                  ),
-                  controller: _textController,
-                  focusNode: _focusNode,
-                  readOnly: true,
-                  showCursor: true,
-                  decoration: InputDecoration(
-                    hintText: 'Tap below to type with Kirat keyboard...',
-                    hintStyle: TextStyle(
-                      fontSize: 14,
+        child: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(isLandscapeSmall ? 4.0 : 16.0),
+                  child: TextField(
+                    minLines: 1,
+                    maxLines: null,
+                    textAlign: TextAlign.left,
+                    textAlignVertical: TextAlignVertical.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
                       color: themeProvider.isDarkMode
-                          ? Colors.grey[400]
-                          : Colors.grey[600],
+                          ? Colors.white
+                          : Colors.black,
+                      letterSpacing: 1.2,
                     ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    controller: _textController,
+                    focusNode: _focusNode,
+                    readOnly: true,
+                    showCursor: true,
+                    decoration: InputDecoration(
+                      hintText: 'Tap below to type with Kirat keyboard...',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: themeProvider.isDarkMode
+                            ? Colors.grey[400]
+                            : Colors.grey[600],
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      filled: true,
+                      fillColor: themeProvider.isDarkMode
+                          ? Colors.grey[800]
+                          : Colors.white,
                     ),
-                    filled: true,
-                    fillColor: themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.white,
                   ),
                 ),
               ),
-            ),
-            KiratKeyboard(
-              onKeyPressed: _handleKeyPress,
-            ),
-          ],
+              KiratKeyboard(onKeyPressed: _handleKeyPress),
+            ],
+          ),
         ),
       ),
     );

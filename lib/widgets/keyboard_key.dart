@@ -113,6 +113,14 @@ class _KeyboardKeyState extends State<KeyboardKey> {
           }
         }
 
+        final size = MediaQuery.of(context).size;
+        final isLandscapeSmall = size.width > size.height && size.height < 500;
+
+        final double vPadding = isLandscapeSmall ? 2.0 : 4.0;
+        final double hPadding = isLandscapeSmall ? 1.5 : 2.5;
+        final double fSize = isLandscapeSmall ? 18.0 : 22.0;
+        final double iSize = isLandscapeSmall ? 18.0 : 22.0;
+
         return Listener(
           behavior: HitTestBehavior.opaque,
           onPointerDown: (_) =>
@@ -120,7 +128,10 @@ class _KeyboardKeyState extends State<KeyboardKey> {
           onPointerUp: (_) => _handleTapUp(displayText, provider),
           onPointerCancel: (_) => _handleTapCancel(provider),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 4.0),
+            padding: EdgeInsets.symmetric(
+              horizontal: hPadding,
+              vertical: vPadding,
+            ),
             child: Material(
               color: _isPressed
                   ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])
@@ -133,27 +144,27 @@ class _KeyboardKeyState extends State<KeyboardKey> {
                     return ShiftIcon(
                       color: textColor,
                       isFilled: isShiftEnabled,
-                      size: 24,
+                      size: iSize,
                     );
                   } else if (widget.keyData.primaryChar == '⌫') {
                     return Icon(
                       Icons.backspace_outlined,
                       color: textColor,
-                      size: 22,
+                      size: iSize,
                     );
                   } else if (widget.keyData.primaryChar == '🌐') {
-                    return Icon(Icons.language, color: textColor, size: 22);
+                    return Icon(Icons.language, color: textColor, size: iSize);
                   } else if (widget.keyData.primaryChar == '⏎') {
                     return Icon(
                       Icons.keyboard_return,
                       color: textColor,
-                      size: 22,
+                      size: iSize,
                     );
                   }
                   return Text(
                     displayText,
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: fSize,
                       fontWeight: FontWeight.w500,
                       color: textColor,
                     ),
