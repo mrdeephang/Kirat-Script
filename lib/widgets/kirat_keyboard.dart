@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import '../providers/keyboard_provider.dart';
 import '../providers/theme_provider.dart';
+import 'emoji_custom_search_view.dart';
 
 class PopupData {
   final Offset position;
@@ -183,7 +184,13 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                         'spacebar_${keyboardProvider.currentLanguage}_${keyboardProvider.isSymbolsMode}',
                       ),
                       keyData: key,
-                      onTap: widget.onKeyPressed,
+                      onTap: (text) {
+                        if (keyboardProvider.isEmojiSearchMode) {
+                          keyboardProvider.updateEmojiSearchQuery(text);
+                        } else {
+                          widget.onKeyPressed(text);
+                        }
+                      },
                     )
                   : KeyboardKey(
                       key: ValueKey(
@@ -195,7 +202,15 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                             key.primaryChar == ' ' ||
                             key.primaryChar == '⌫' ||
                             key.primaryChar == '⏎') {
-                          widget.onKeyPressed(text);
+                          if (keyboardProvider.isEmojiSearchMode) {
+                            if (key.primaryChar == '⌫') {
+                              keyboardProvider.backspaceEmojiSearchQuery();
+                            } else if (key.primaryChar != '⏎') {
+                              keyboardProvider.updateEmojiSearchQuery(text);
+                            }
+                          } else {
+                            widget.onKeyPressed(text);
+                          }
                         }
                         keyboardProvider.handleKeyPress(key);
                       },
@@ -208,7 +223,10 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
     );
   }
 
-  Widget _buildEmojiPicker(KeyboardProvider keyboardProvider, ThemeProvider themeProvider) {
+  Widget _buildEmojiPicker(
+    KeyboardProvider keyboardProvider,
+    ThemeProvider themeProvider,
+  ) {
     return Column(
       children: [
         Expanded(
@@ -218,11 +236,39 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
             },
             config: Config(
               emojiViewConfig: EmojiViewConfig(
-                backgroundColor: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.grey[300]!,
+                backgroundColor: themeProvider.isDarkMode
+                    ? Colors.grey[900]!
+                    : Colors.grey[300]!,
                 columns: 8,
               ),
               categoryViewConfig: CategoryViewConfig(
                 backgroundColor: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.grey[300]!,
+                extraTab: CategoryExtraTab.SEARCH,
+              ),
+              searchViewConfig: SearchViewConfig(
+                backgroundColor: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.grey[300]!,
+                buttonIconColor: themeProvider.isDarkMode ? Colors.white54 : Colors.black54,
+                customSearchView: (config, state, showEmojiView) {
+                  return EmojiCustomSearchView(
+                    config: config,
+                    state: state,
+                    showEmojiView: showEmojiView,
+                    keyboardProvider: keyboardProvider,
+                    themeProvider: themeProvider,
+                    onEmojiSelectedDirectly: widget.onKeyPressed,
+                    keyboardRows: Column(
+                      children: [
+                        for (int i = 0; i < keyboardProvider.currentKeys.length; i++)
+                          _buildKeyboardRow(
+                            i,
+                            keyboardProvider.currentKeys[i],
+                            keyboardProvider.currentKeys.length - 1,
+                            keyboardProvider,
+                          ),
+                      ],
+                    ),
+                  );
+                },
               ),
               bottomActionBarConfig: const BottomActionBarConfig(
                 enabled: false,
@@ -236,25 +282,26 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
               flex: 15,
               child: KeyboardKey(
                 key: const ValueKey('emoji_abc'),
-                keyData: const KiratKey(primaryChar: 'ABC', isSpecial: true, width: 1.5),
+                keyData: const KiratKey(
+                  primaryChar: 'ABC',
+                  isSpecial: true,
+                  width: 1.5,
+                ),
                 onTap: (_) => keyboardProvider.toggleEmojiMode(),
                 showPopup: _showPopup,
                 hidePopup: _hidePopup,
               ),
             ),
-            Expanded(
-              flex: 70,
-              child: SpaceBarWithLanguage(
-                key: const ValueKey('emoji_space'),
-                keyData: const KiratKey(primaryChar: ' ', width: 7.0),
-                onTap: widget.onKeyPressed,
-              ),
-            ),
+            const Spacer(flex: 70),
             Expanded(
               flex: 15,
               child: KeyboardKey(
                 key: const ValueKey('emoji_backspace'),
-                keyData: const KiratKey(primaryChar: '⌫', isSpecial: true, width: 1.5),
+                keyData: const KiratKey(
+                  primaryChar: '⌫',
+                  isSpecial: true,
+                  width: 1.5,
+                ),
                 onTap: (_) => widget.onKeyPressed('⌫'),
                 showPopup: _showPopup,
                 hidePopup: _hidePopup,

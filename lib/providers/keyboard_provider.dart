@@ -10,12 +10,16 @@ class KeyboardProvider with ChangeNotifier {
   String _currentLanguage = 'kirat';
   bool _isBackspacePressed = false;
   Timer? _backspaceTimer;
+  String _emojiSearchQuery = '';
+  bool _isEmojiSearchMode = false;
 
   bool get isShiftEnabled => _isShiftEnabled;
   bool get isSymbolsMode => _isSymbolsMode;
   bool get isEmojiMode => _isEmojiMode;
   String get currentLanguage => _currentLanguage;
   bool get isBackspacePressed => _isBackspacePressed;
+  String get emojiSearchQuery => _emojiSearchQuery;
+  bool get isEmojiSearchMode => _isEmojiSearchMode;
 
   List<List<KiratKey>> get currentKeys {
     if (_currentLanguage == 'english') {
@@ -85,6 +89,15 @@ class KeyboardProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setLanguage(String lang) {
+    if (_currentLanguage != lang) {
+      _currentLanguage = lang;
+      _isShiftEnabled = false;
+      _isSymbolsMode = false;
+      notifyListeners();
+    }
+  }
+
   void toggleSymbolsMode() {
     _isSymbolsMode = !_isSymbolsMode;
     _isShiftEnabled = false;
@@ -95,7 +108,31 @@ class KeyboardProvider with ChangeNotifier {
     _isEmojiMode = !_isEmojiMode;
     _isShiftEnabled = false;
     _isSymbolsMode = false;
+    if (!_isEmojiMode) {
+      _isEmojiSearchMode = false;
+      _emojiSearchQuery = '';
+    }
     notifyListeners();
+  }
+
+  void setEmojiSearchMode(bool enabled) {
+    _isEmojiSearchMode = enabled;
+    if (!enabled) {
+      _emojiSearchQuery = '';
+    }
+    notifyListeners();
+  }
+
+  void updateEmojiSearchQuery(String text) {
+    _emojiSearchQuery += text;
+    notifyListeners();
+  }
+
+  void backspaceEmojiSearchQuery() {
+    if (_emojiSearchQuery.isNotEmpty) {
+      _emojiSearchQuery = _emojiSearchQuery.substring(0, _emojiSearchQuery.length - 1);
+      notifyListeners();
+    }
   }
 
   String getKeyText(KiratKey key) {
