@@ -130,7 +130,10 @@ class KeyboardProvider with ChangeNotifier {
 
   void backspaceEmojiSearchQuery() {
     if (_emojiSearchQuery.isNotEmpty) {
-      _emojiSearchQuery = _emojiSearchQuery.substring(0, _emojiSearchQuery.length - 1);
+      _emojiSearchQuery = _emojiSearchQuery.substring(
+        0,
+        _emojiSearchQuery.length - 1,
+      );
       notifyListeners();
     }
   }

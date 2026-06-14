@@ -242,12 +242,18 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                 columns: 8,
               ),
               categoryViewConfig: CategoryViewConfig(
-                backgroundColor: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.grey[300]!,
+                backgroundColor: themeProvider.isDarkMode
+                    ? Colors.grey[900]!
+                    : Colors.grey[300]!,
                 extraTab: CategoryExtraTab.SEARCH,
               ),
               searchViewConfig: SearchViewConfig(
-                backgroundColor: themeProvider.isDarkMode ? Colors.grey[900]! : Colors.grey[300]!,
-                buttonIconColor: themeProvider.isDarkMode ? Colors.white54 : Colors.black54,
+                backgroundColor: themeProvider.isDarkMode
+                    ? Colors.grey[900]!
+                    : Colors.grey[300]!,
+                buttonIconColor: themeProvider.isDarkMode
+                    ? Colors.white54
+                    : Colors.black54,
                 customSearchView: (config, state, showEmojiView) {
                   return EmojiCustomSearchView(
                     config: config,
@@ -258,7 +264,11 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                     onEmojiSelectedDirectly: widget.onKeyPressed,
                     keyboardRows: Column(
                       children: [
-                        for (int i = 0; i < keyboardProvider.currentKeys.length; i++)
+                        for (
+                          int i = 0;
+                          i < keyboardProvider.currentKeys.length;
+                          i++
+                        )
                           _buildKeyboardRow(
                             i,
                             keyboardProvider.currentKeys[i],
