@@ -1,8 +1,12 @@
-# Kirat Script
+# Kirat Script Keyboard
 
-> **Custom in-app keyboard for Kirat script** — Seamless bilingual typing with English QWERTY support
+A custom, open-source virtual keyboard designed specifically for the Kirat script, featuring seamless bilingual support with an English QWERTY layout.
 
 ---
+
+## Overview
+
+Kirat Script Keyboard provides a native typing experience for Kirat characters across mobile and web platforms. Built with Flutter, it offers a robust, dynamic interface that adapts to various screen sizes and orientations, ensuring comfortable text input whether used as an in-app keyboard or an integrated system Input Method Editor (IME).
 
 ## Screenshots
 
@@ -19,122 +23,89 @@
 
 ---
 
-## Features
+## Core Features
 
-- **Dual language support** — Toggle between Kirat script and English QWERTY
-- **Persistent number row** — Always-visible numbers at the top
-- **Dedicated symbols mode** — Quick access to special characters
-- **Smart layout system**:
-  - Kirat numbers (᥇-᥆) in Kirat mode
-  - Standard numbers (0-9) in English mode
-  - Comprehensive symbol sets for both languages
-- Visual language indicator** — Current mode displayed above spacebar -**Cross-platform\*\* — Optimized for both Android and iOS
+* **Dual Language Support:** Instantly toggle between Kirat script and standard English QWERTY layouts.
+* **Smart Layout System:** Adaptive rendering that provides Kirat numerals in Kirat mode and standard Arabic numerals in English mode.
+* **Persistent Number Row:** A dedicated top row for numerical input, improving typing efficiency.
+* **Responsive Sizing:** Intelligently scales padding and font sizes across portrait and landscape orientations to prevent UI clipping.
+* **Dark and Light Modes:** Fully supports dynamic system theming with accessible contrast ratios.
+* **Cross-Platform:** Optimized for Android, iOS, and Web environments.
 
----
-
-## Keyboard Layouts
+## Keyboard Layout Details
 
 ### Kirat Mode
-
-- **Top row**: Kirat numbers ᥇-᥏
-- **Main area**: Kirat consonants and vowels
-- **Symbols**: Kirat-specific punctuation and common symbols
+* **Top Row:** Kirat numerals.
+* **Main Area:** Kirat consonants and vowels.
+* **Symbols:** Kirat-specific punctuation and frequently used characters.
 
 ### English Mode
-
-- **Top row**: Standard numbers 0-9
-- **Main area**: QWERTY layout
-- **Symbols**: Comprehensive symbol set
-
----
+* **Top Row:** Standard numerals.
+* **Main Area:** QWERTY layout.
+* **Symbols:** Comprehensive standard symbol set.
 
 ## Controls
 
-| Button          | Function                                       |
-| --------------- | ---------------------------------------------- |
-| **Globe**    | Toggle between Kirat and English               |
-| **!#1/ABC**     | Switch between letters and symbols             |
-| **⇧ Shift**     | Capitalize letters / access additional symbols |
-| **⌫ Backspace** | Delete characters                              |
-| **⏎ Enter**     | Insert new line                                |
+| Key Type | Function |
+| :--- | :--- |
+| **Language Toggle** | Switches the active layout between Kirat and English. |
+| **Symbols Toggle** | Switches between the alphanumeric and symbols layouts. |
+| **Shift** | Capitalizes letters or accesses alternate characters on the current layout. |
+| **Backspace** | Deletes characters (supports continuous deletion on long-press). |
+| **Enter** | Inserts a new line or submits the form. |
 
----
+## Development Setup
 
-## Folder Structure
+### Prerequisites
+* Flutter SDK (^3.9.0)
+* Dart SDK
+* An active emulator or connected physical device
 
-```
-lib/
-├── app/
-│   └── app.dart                 
-├── const/
-│   └── colors.dart              # Color constants
-├── models/
-│   └── kirat_layout.dart        # Keyboard layout data
-├── providers/
-│   ├── keyboard_provider.dart   # Keyboard state management
-│   └── theme_provider.dart      # Theme state management
-├── screens/
-│   └── keyboard_screen.dart     # Main keyboard screen
-├── widgets/
-│   ├── keyboard_key.dart        # Individual key widget
-│   ├── kirat_keyboard.dart      # Kirat layout widget
-│   └── spacebar.dart            # Spacebar with language indicator
-└── main.dart                    # App entry point
-```
+### Installation
 
----
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mrdeephang/kirat-script.git
+   cd kirat-script
+   ```
 
-## Technical Stack
+2. Install project dependencies:
+   ```bash
+   flutter pub get
+   ```
 
-- **Flutter** — Cross-platform framework
-- **Provider** — State management
-- **Custom widgets** — Keyboard implementation
-- **Unicode support** — Kirat character compliance
+3. Run the application:
+   ```bash
+   flutter run
+   ```
 
----
+### Testing
 
-## Usage
-
-1. Launch the app to access the in-app keyboard
-2. Tap the **globe icon** to switch languages
-3. Use **!#1/ABC** toggle for symbols and special characters
-4. Numbers are always accessible from the top row
-5. Current language is displayed above the spacebar
-
----
-
-## How to Run
+The project maintains a suite of unit, widget, and integration tests to ensure stability.
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/mrdeephang/kirat-script.git
-cd kirat-script
+# Run unit and widget tests
+flutter test
 
-# 2. Install dependencies
-flutter pub get
-
-# 3. Run the app
-flutter run
+# Run end-to-end integration tests (requires connected device/emulator)
+flutter test integration_test/app_test.dart
 ```
 
----
+## Contributing
 
-## Future Enhancements
+We welcome contributions from the community. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines on how to report bugs, request features, and submit pull requests.
 
-- **System keyboard integration** — Enable as default keyboard through device settings
-- **Custom themes** — User-customizable keyboard appearance
-- **Text predictions** — Smart word suggestions
-- **Haptic feedback** — Tactile key press response
+## Architecture
 
----
+* **Framework:** Flutter
+* **State Management:** Provider
+* **Continuous Integration:** GitHub Actions (Automated formatting, analysis, testing, and multi-platform compilation)
 
 ## Author
 
-**Deephang Thegim**  
+**Deephang Thegim**
 GitHub: [@mrdeephang](https://github.com/mrdeephang)
-
----
 
 ## License
 
-Copyright © 2026 Deephang Thegim. All rights reserved.
+Copyright 2026 Deephang Thegim. All rights reserved.
