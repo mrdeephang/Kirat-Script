@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
@@ -29,6 +30,8 @@ class EmojiCustomSearchView extends StatefulWidget {
 
 class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
   List<Emoji> _searchResults = [];
+  Timer? _cursorTimer;
+  bool _showCursor = true;
 
   @override
   void initState() {
@@ -38,10 +41,18 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
       widget.keyboardProvider.setLanguage('english');
     });
     widget.keyboardProvider.addListener(_onSearchQueryChanged);
+    _cursorTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      if (mounted) {
+        setState(() {
+          _showCursor = !_showCursor;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    _cursorTimer?.cancel();
     widget.keyboardProvider.removeListener(_onSearchQueryChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Safely turn off search mode if the widget is unmounted (e.g. user closed emoji picker entirely)
@@ -99,15 +110,17 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
                     children: widget.keyboardProvider.emojiSearchQuery.isEmpty
                         ? [
                             TextSpan(
-                              text: '| ',
+                              text: '|',
                               style: TextStyle(
-                                color: isDark ? Colors.blue : Colors.blueAccent,
+                                color: _showCursor
+                                    ? (isDark ? Colors.blue : Colors.blueAccent)
+                                    : Colors.transparent,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16,
                               ),
                             ),
                             TextSpan(
-                              text: "Search emojis...",
+                              text: " Search emojis...",
                               style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 16,
@@ -125,7 +138,9 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
                             TextSpan(
                               text: '|',
                               style: TextStyle(
-                                color: isDark ? Colors.blue : Colors.blueAccent,
+                                color: _showCursor
+                                    ? (isDark ? Colors.blue : Colors.blueAccent)
+                                    : Colors.transparent,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16,
                               ),
@@ -153,22 +168,29 @@ class _EmojiCustomSearchViewState extends State<EmojiCustomSearchView> {
                 )
               : ListView.builder(
                   scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   itemCount: _searchResults.length,
                   itemBuilder: (context, index) {
                     final emoji = _searchResults[index];
-                    return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        // User selected an emoji! Send it directly to the host app.
-                        // Bypassing the category selection to avoid index 0 caching bugs.
-                        widget.onEmojiSelectedDirectly(emoji.emoji);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        alignment: Alignment.center,
-                        child: Text(
-                          emoji.emoji,
-                          style: const TextStyle(fontSize: 28),
+                    return Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        key: ValueKey(
+                          'emoji_search_result_${emoji.emoji}_$index',
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () {
+                          // User selected an emoji! Send it directly to the host app.
+                          // Bypassing the category selection to avoid index 0 caching bugs.
+                          widget.onEmojiSelectedDirectly(emoji.emoji);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          alignment: Alignment.center,
+                          child: Text(
+                            emoji.emoji,
+                            style: const TextStyle(fontSize: 28),
+                          ),
                         ),
                       ),
                     );

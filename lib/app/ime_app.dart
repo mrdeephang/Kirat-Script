@@ -26,13 +26,6 @@ class IMEApp extends StatelessWidget {
                 ImeHandler.sendBackspace();
               } else if (text == '⏎') {
                 ImeHandler.sendEnter();
-              } else if (text == '⇧' ||
-                  text == '🌐' ||
-                  text == '😀' ||
-                  text == '!#1' ||
-                  text == 'ABC' ||
-                  text == '!#᥇' ||
-                  text == 'ᤁᤂᤃ') {
               } else {
                 ImeHandler.commitText(text);
               }

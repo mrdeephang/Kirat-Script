@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:kirat_script/models/kirat_layout.dart';
 
 class KeyboardProvider with ChangeNotifier {
@@ -130,10 +129,8 @@ class KeyboardProvider with ChangeNotifier {
 
   void backspaceEmojiSearchQuery() {
     if (_emojiSearchQuery.isNotEmpty) {
-      _emojiSearchQuery = _emojiSearchQuery.substring(
-        0,
-        _emojiSearchQuery.length - 1,
-      );
+      final chars = _emojiSearchQuery.characters;
+      _emojiSearchQuery = chars.take(chars.length - 1).toString();
       notifyListeners();
     }
   }
