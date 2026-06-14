@@ -24,12 +24,10 @@ class PopupData {
 
 class KiratKeyboard extends StatefulWidget {
   final Function(String) onKeyPressed;
-  final Function() onBackspaceLongPress;
 
   const KiratKeyboard({
     super.key,
     required this.onKeyPressed,
-    required this.onBackspaceLongPress,
   });
 
   @override
@@ -201,9 +199,6 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                         }
                         keyboardProvider.handleKeyPress(key);
                       },
-                      onLongPress: key.primaryChar == '⌫'
-                          ? widget.onBackspaceLongPress
-                          : null,
                       showPopup: _showPopup,
                       hidePopup: _hidePopup,
                     ),

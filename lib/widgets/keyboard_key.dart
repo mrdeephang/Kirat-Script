@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kirat_script/models/kirat_layout.dart';
 import 'package:kirat_script/providers/keyboard_provider.dart';
@@ -8,7 +9,6 @@ import 'package:kirat_script/utils/ime_handler.dart';
 class KeyboardKey extends StatefulWidget {
   final KiratKey keyData;
   final Function(String) onTap;
-  final Function()? onLongPress;
   final Function(BuildContext, String, Color, Color)? showPopup;
   final Function()? hidePopup;
 
@@ -16,7 +16,6 @@ class KeyboardKey extends StatefulWidget {
     super.key,
     required this.keyData,
     required this.onTap,
-    this.onLongPress,
     this.showPopup,
     this.hidePopup,
   });
@@ -27,25 +26,56 @@ class KeyboardKey extends StatefulWidget {
 
 class _KeyboardKeyState extends State<KeyboardKey> {
   bool _isPressed = false;
+  Timer? _longPressDelayTimer;
 
-  void _handleTapDown(String displayText, Color keyColor, Color textColor) {
+  void _handleTapDown(String displayText, Color keyColor, Color textColor, KeyboardProvider provider) {
     ImeHandler.performHapticFeedback();
     ImeHandler.playClickSound();
     setState(() => _isPressed = true);
     if (!widget.keyData.isSpecial && widget.keyData.primaryChar != ' ') {
       widget.showPopup?.call(context, displayText, keyColor, textColor);
     }
+
+    if (widget.keyData.primaryChar == '⌫') {
+      _longPressDelayTimer?.cancel();
+      _longPressDelayTimer = Timer(const Duration(milliseconds: 400), () {
+        provider.startBackspace();
+      });
+    }
   }
 
-  void _handleTapUp(String displayText) {
+  void _handleTapUp(String displayText, KeyboardProvider provider) {
     setState(() => _isPressed = false);
     widget.hidePopup?.call();
-    widget.onTap(displayText);
+
+    if (widget.keyData.primaryChar == '⌫') {
+      _longPressDelayTimer?.cancel();
+      if (provider.isBackspacePressed) {
+        provider.stopBackspace();
+      } else {
+        widget.onTap(displayText);
+      }
+    } else {
+      widget.onTap(displayText);
+    }
   }
 
-  void _handleTapCancel() {
+  void _handleTapCancel(KeyboardProvider provider) {
     setState(() => _isPressed = false);
     widget.hidePopup?.call();
+
+    if (widget.keyData.primaryChar == '⌫') {
+      _longPressDelayTimer?.cancel();
+      if (provider.isBackspacePressed) {
+        provider.stopBackspace();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _longPressDelayTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -81,33 +111,27 @@ class _KeyboardKeyState extends State<KeyboardKey> {
         return Listener(
           behavior: HitTestBehavior.opaque,
           onPointerDown: (_) =>
-              _handleTapDown(displayText, keyColor, textColor),
-          onPointerUp: (_) => _handleTapUp(displayText),
-          onPointerCancel: (_) => _handleTapCancel(),
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onLongPress: widget.keyData.primaryChar == '⌫'
-                ? widget.onLongPress
-                : null,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 2.5,
-                vertical: 4.0,
-              ),
-              child: Material(
-                color: _isPressed
-                    ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])
-                    : keyColor,
-                borderRadius: BorderRadius.circular(8),
-                elevation: 1,
-                child: Center(
-                  child: Text(
-                    displayText,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: textColor,
-                    ),
+              _handleTapDown(displayText, keyColor, textColor, provider),
+          onPointerUp: (_) => _handleTapUp(displayText, provider),
+          onPointerCancel: (_) => _handleTapCancel(provider),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 2.5,
+              vertical: 4.0,
+            ),
+            child: Material(
+              color: _isPressed
+                  ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])
+                  : keyColor,
+              borderRadius: BorderRadius.circular(8),
+              elevation: 1,
+              child: Center(
+                child: Text(
+                  displayText,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: textColor,
                   ),
                 ),
               ),
