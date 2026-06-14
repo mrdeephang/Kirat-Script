@@ -73,14 +73,9 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
     final size = MediaQuery.of(context).size;
     final isLandscape = size.width > size.height;
 
-    // Dynamically adjust height to prevent overflow.
-    // If landscape AND the screen height is short (e.g., mobile phones < 500px), use 180.
-    // Otherwise (desktop/web/laptops or portrait), use 340 for a comfortable size.
     final double keyboardHeight = (isLandscape && size.height < 500)
         ? 180.0
         : 340.0;
-    final double containerHeight =
-        keyboardHeight + 70.0; // 70px extra for the popup preview
 
     return Consumer<KeyboardProvider>(
       builder: (context, keyboardProvider, child) {
@@ -95,18 +90,12 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
 
         return Container(
           key: _keyboardKey,
-          height: containerHeight,
-          color: Colors.transparent,
+          height: keyboardHeight,
+          color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.grey[300],
           child: Stack(
             clipBehavior: Clip.none,
-            alignment: Alignment.bottomCenter,
             children: [
-              Container(
-                width: double.infinity,
-                height: keyboardHeight,
-                color: themeProvider.isDarkMode
-                    ? Colors.grey[900]
-                    : Colors.grey[300],
+              Align(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 800),

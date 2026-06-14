@@ -155,6 +155,25 @@ class FlutterIMEService : InputMethodService() {
         flutterEngine.lifecycleChannel.appIsPaused()
     }
 
+    override fun onConfigureWindow(win: android.view.Window, isFullScreen: Boolean, isCandidatesOnly: Boolean) {
+        super.onConfigureWindow(win, isFullScreen, isCandidatesOnly)
+        win.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
+    }
+
+    override fun onComputeInsets(outInsets: android.inputmethodservice.InputMethodService.Insets) {
+        super.onComputeInsets(outInsets)
+        if (!isFullscreenMode) {
+            val transparentTopDp = 70f
+            val transparentTopPx = android.util.TypedValue.applyDimension(
+                android.util.TypedValue.COMPLEX_UNIT_DIP, transparentTopDp, resources.displayMetrics
+            ).toInt()
+
+            outInsets.contentTopInsets = transparentTopPx
+            outInsets.visibleTopInsets = transparentTopPx
+            outInsets.touchableInsets = android.inputmethodservice.InputMethodService.Insets.TOUCHABLE_INSETS_VISIBLE
+        }
+    }
+
     override fun onDestroy() {
         if (::flutterView.isInitialized) {
             flutterView.detachFromFlutterEngine()
