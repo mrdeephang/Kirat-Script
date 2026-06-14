@@ -28,7 +28,12 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   bool _isPressed = false;
   Timer? _longPressDelayTimer;
 
-  void _handleTapDown(String displayText, Color keyColor, Color textColor, KeyboardProvider provider) {
+  void _handleTapDown(
+    String displayText,
+    Color keyColor,
+    Color textColor,
+    KeyboardProvider provider,
+  ) {
     ImeHandler.performHapticFeedback();
     ImeHandler.playClickSound();
     setState(() => _isPressed = true);
@@ -115,10 +120,7 @@ class _KeyboardKeyState extends State<KeyboardKey> {
           onPointerUp: (_) => _handleTapUp(displayText, provider),
           onPointerCancel: (_) => _handleTapCancel(provider),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 2.5,
-              vertical: 4.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 4.0),
             child: Material(
               color: _isPressed
                   ? (isDarkMode ? Colors.grey[600] : Colors.grey[300])
@@ -126,19 +128,109 @@ class _KeyboardKeyState extends State<KeyboardKey> {
               borderRadius: BorderRadius.circular(8),
               elevation: 1,
               child: Center(
-                child: Text(
-                  displayText,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                    color: textColor,
-                  ),
-                ),
+                child: () {
+                  if (widget.keyData.primaryChar == '⇧') {
+                    return ShiftIcon(
+                      color: textColor,
+                      isFilled: isShiftEnabled,
+                      size: 24,
+                    );
+                  } else if (widget.keyData.primaryChar == '⌫') {
+                    return Icon(
+                      Icons.backspace_outlined,
+                      color: textColor,
+                      size: 22,
+                    );
+                  } else if (widget.keyData.primaryChar == '🌐') {
+                    return Icon(Icons.language, color: textColor, size: 22);
+                  } else if (widget.keyData.primaryChar == '⏎') {
+                    return Icon(
+                      Icons.keyboard_return,
+                      color: textColor,
+                      size: 22,
+                    );
+                  }
+                  return Text(
+                    displayText,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                    ),
+                  );
+                }(),
               ),
             ),
           ),
         );
       },
     );
+  }
+}
+
+class ShiftIcon extends StatelessWidget {
+  final Color color;
+  final bool isFilled;
+  final double size;
+
+  const ShiftIcon({
+    super.key,
+    required this.color,
+    required this.isFilled,
+    this.size = 24,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        painter: ShiftPainter(color: color, isFilled: isFilled),
+      ),
+    );
+  }
+}
+
+class ShiftPainter extends CustomPainter {
+  final Color color;
+  final bool isFilled;
+
+  ShiftPainter({required this.color, required this.isFilled});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    if (isFilled) {
+      paint.style = PaintingStyle.fill;
+    } else {
+      paint.style = PaintingStyle.stroke;
+    }
+
+    final w = size.width;
+    final h = size.height;
+
+    // Draw the arrow polygon
+    final path = Path()
+      ..moveTo(w / 2, h * 0.1) // Tip
+      ..lineTo(w * 0.95, h * 0.5) // Right tip corner
+      ..lineTo(w * 0.68, h * 0.5) // Right shoulder
+      ..lineTo(w * 0.68, h * 0.9) // Right bottom
+      ..lineTo(w * 0.32, h * 0.9) // Left bottom
+      ..lineTo(w * 0.32, h * 0.5) // Left shoulder
+      ..lineTo(w * 0.05, h * 0.5) // Left tip corner
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant ShiftPainter oldDelegate) {
+    return oldDelegate.color != color || oldDelegate.isFilled != isFilled;
   }
 }
