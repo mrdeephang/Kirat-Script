@@ -47,13 +47,21 @@ class _SpaceBarWithLanguageState extends State<SpaceBarWithLanguage> {
         final baseColor = isDarkMode ? Colors.grey[800]! : Colors.white;
         final pressedColor = isDarkMode ? Colors.grey[600]! : Colors.grey[300]!;
 
+        final size = MediaQuery.of(context).size;
+        final isLandscapeSmall = size.width > size.height && size.height < 500;
+
+        final double vPadding = isLandscapeSmall ? 2.0 : 4.0;
+        final double hPadding = isLandscapeSmall ? 1.5 : 2.5;
+        final double fSize = isLandscapeSmall ? 14.0 : 16.0;
+        final double lineOffset = isLandscapeSmall ? -5.0 : -10.0;
+
         return Listener(
           behavior: HitTestBehavior.opaque,
           onPointerDown: (_) => _handleTapDown(),
           onPointerUp: (_) => _handleTapUp(),
           onPointerCancel: (_) => _handleTapCancel(),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 4.0),
+            padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
             child: Material(
               color: _isPressed ? pressedColor : baseColor,
               borderRadius: BorderRadius.circular(8),
@@ -69,12 +77,12 @@ class _SpaceBarWithLanguageState extends State<SpaceBarWithLanguage> {
                           : 'Kirat',
                       style: TextStyle(
                         color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                        fontSize: 16,
+                        fontSize: fSize,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Positioned(
-                      bottom: -10, // Positioned slightly below the text
+                      bottom: lineOffset,
                       child: Container(
                         width: 30,
                         height: 3,

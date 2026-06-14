@@ -73,12 +73,13 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final size = MediaQuery.of(context).size;
+    final isLandscape = size.width > size.height;
 
-    // Dynamically adjust height for landscape to prevent overflow
-    // Standard portrait height adjusted to 340 for a comfortable size
-    final double keyboardHeight = isLandscape ? 180.0 : 340.0;
+    // Dynamically adjust height to prevent overflow.
+    // If landscape AND the screen height is short (e.g., mobile phones < 500px), use 180.
+    // Otherwise (desktop/web/laptops or portrait), use 340 for a comfortable size.
+    final double keyboardHeight = (isLandscape && size.height < 500) ? 180.0 : 340.0;
     final double containerHeight =
         keyboardHeight + 70.0; // 70px extra for the popup preview
 
@@ -102,20 +103,28 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
             alignment: Alignment.bottomCenter,
             children: [
               Container(
+                width: double.infinity,
                 height: keyboardHeight,
                 color: themeProvider.isDarkMode
                     ? Colors.grey[900]
                     : Colors.grey[300],
-                child: Column(
-                  children: [
-                    for (int i = 0; i < currentKeys.length; i++)
-                      _buildKeyboardRow(
-                        i,
-                        currentKeys[i],
-                        lastRowIndex,
-                        keyboardProvider,
-                      ),
-                  ],
+                alignment: Alignment.center,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        for (int i = 0; i < currentKeys.length; i++)
+                          _buildKeyboardRow(
+                            i,
+                            currentKeys[i],
+                            lastRowIndex,
+                            keyboardProvider,
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               ValueListenableBuilder<PopupData?>(
