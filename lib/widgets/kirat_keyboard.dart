@@ -244,7 +244,9 @@ class _KiratKeyboardState extends State<KiratKeyboard> {
                   'No Recents',
                   style: TextStyle(
                     fontSize: 20,
-                    color: themeProvider.isDarkMode ? Colors.white54 : Colors.black26,
+                    color: themeProvider.isDarkMode
+                        ? Colors.white54
+                        : Colors.black26,
                   ),
                   textAlign: TextAlign.center,
                 ),
