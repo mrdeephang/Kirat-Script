@@ -1,4 +1,4 @@
-package com.example.kirat_script
+package com.mokhvia.kiratscript
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
